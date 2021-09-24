@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3054e477350c5fc48947d672055ef51e, type: 3}
+  m_Name: SF_Mission9_Challenge1
+  m_EditorClassIdentifier: 
+  copyFileName: 0
+  challengeName: SF_Mission9_Challenge1
+  situation: 3
+  type: 1
+  parentMission: {fileID: 11400000, guid: 12d881ae8df485543b29fdcdba8467f9, type: 2}
+  amountRequired: 300
+  currentAmount: 0
+  completed: 0
+  challengeIndex: 0
+  customChallengeTextID: 
+  collectType: 1
+  obstacleType: 0
+  cleaningType: 0
+  percentage: 1
+  currentPercentage: 0
+  pirouettes:
+  - type: 4
+    done: 0
+  - type: 6
+    done: 0
+  inOrder: 1
+  pirouettesFoldout: 0101
+  minHeight: -3.4028235e+38
+  maxHeight: 3.4028235e+38
+  allowOtherPirouettesInTheMiddle: 0
+  distanceCharacter: -1
+  enemiesType: 0

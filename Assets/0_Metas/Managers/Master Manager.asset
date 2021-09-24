@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 32
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2abfc2716e731146bbd55ac7dbbc660, type: 3}
+  m_Name: Master Manager
+  m_EditorClassIdentifier: 
+  _gameResourcesManager: {fileID: 11400000, guid: 5b46eb899f11dab4fb8be9fe4b3e227e,
+    type: 2}
+  _gameData: {fileID: 11400000, guid: 94d886d87ad70a146ac5fd3d3f1165da, type: 2}
+  _terrainData: {fileID: 11400000, guid: d7d6c43b2d3b5ed43a95e7a5842f083e, type: 2}
+  _missionsData: {fileID: 11400000, guid: 2a26fa0acd00abb4f87cb9f2e8c0401d, type: 2}

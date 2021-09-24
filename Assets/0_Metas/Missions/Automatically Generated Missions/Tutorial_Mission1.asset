@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04ace75bc08169c4f9f5461edde2864c, type: 3}
+  m_Name: Tutorial_Mission1
+  m_EditorClassIdentifier: 
+  copyFileName: 0
+  missionName: Tutorial_Mission1
+  stage: 0
+  missionIndex: 0
+  challenges:
+  - {fileID: 11400000, guid: 1df032df11455f54494412246503cdfa, type: 2}
+  - {fileID: 11400000, guid: b08caf99604a4ed40914b58ddc458796, type: 2}
+  - {fileID: 11400000, guid: a79484e822ef0c647b28a6e74fd93413, type: 2}
+  missionCompleted: 1
+  foldouts: 000100

@@ -1,0 +1,121 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5676033421513835782
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8506091662194512961}
+  - component: {fileID: 6068485949577020324}
+  - component: {fileID: 1114257874525095953}
+  - component: {fileID: 4001938907946680500}
+  - component: {fileID: 7444249111365399622}
+  - component: {fileID: 5505813124133960248}
+  m_Layer: 0
+  m_Name: MasterManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8506091662194512961
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5676033421513835782}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 41.05378, y: 879.2589, z: -4335.046}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6068485949577020324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5676033421513835782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d2e415b2bc63d44da3660c3da2a3272, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationsDone: []
+  tutorialHandPrefab: {fileID: 8085860368005547933, guid: b76ba5a050104174ba362c84a844a12e,
+    type: 3}
+  blackVeilPrefab: {fileID: 1878174033073678711, guid: c83bd7b9ae6aba945951bf8197aa4987,
+    type: 3}
+  blackVeilZ: 0
+--- !u!114 &1114257874525095953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5676033421513835782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5f7a6f5da3e517488152fa33dd6911f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  masterManager: {fileID: 11400000, guid: 93a2e9c9b653ce147b9a95dd658e47f4, type: 2}
+--- !u!114 &4001938907946680500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5676033421513835782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fb2bc33b33b2944fa3898e594b9dbda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addGems: 0
+  gemsToAdd: 50
+  addFlasks: 0
+  flasksToAdd: 10
+  addCoins: 0
+  coinsToAdd: 200
+  setLVL: 0
+  character: 0
+  lvl: 0
+  setStageAndMission: 0
+  stage: 0
+  mission: 1
+  showTrader: 0
+  resetTraderTimer: 0
+  traderTime: 1798
+  resetData: 0
+--- !u!114 &7444249111365399622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5676033421513835782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 775488ddb18f72c4992fff8cb526e8e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5505813124133960248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5676033421513835782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94f2628cfe25f054caa28f2ced33c3e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsTimeLoaded: 0

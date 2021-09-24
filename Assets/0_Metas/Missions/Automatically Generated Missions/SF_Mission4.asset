@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04ace75bc08169c4f9f5461edde2864c, type: 3}
+  m_Name: SF_Mission4
+  m_EditorClassIdentifier: 
+  copyFileName: 0
+  missionName: SF_Mission4
+  stage: 1
+  missionIndex: 3
+  challenges:
+  - {fileID: 11400000, guid: 16e2822da3e451b45be6634358bc7076, type: 2}
+  - {fileID: 11400000, guid: 79ec8cb72f896454b9ba516e2d2a7fa7, type: 2}
+  - {fileID: 11400000, guid: 7edd5b37924168e499d39d4e09fdec44, type: 2}
+  missionCompleted: 0
+  foldouts: 000000

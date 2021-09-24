@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fef34a28df080094199bcdb3fe511019, type: 3}
+  m_Name: DailyRewardsSettingsData
+  m_EditorClassIdentifier: 
+  allTimerButtons:
+  - buttonID: RewardButton
+    hours: 24
+    minutes: 0
+    seconds: 0
+    interactable: 0
+    availableAtStart: 1
+    completeText: Open
+  calendarPrefab: {fileID: 1869782733140482, guid: de2046ad0284858438d0fa15bfdb6e31,
+    type: 3}
+  calendarCanvas: {fileID: 1072201933520926, guid: f0fb663a072a5c345bb1a5426202ac18,
+    type: 3}
+  availableAtStart: 1
+  resetAtEnd: 0
+  hours: 24
+  minutes: 0
+  seconds: 0
+  allDays:
+  - dayTexture: {fileID: 21300000, guid: 6dbfcb0b2de6f5f4abe672c9c406737e, type: 3}
+    rewardValue: 2
+  - dayTexture: {fileID: 21300000, guid: 5186eac211df36648b4dd7d96196381c, type: 3}
+    rewardValue: 2000
+  - dayTexture: {fileID: 21300000, guid: 5186eac211df36648b4dd7d96196381c, type: 3}
+    rewardValue: 4000
+  - dayTexture: {fileID: 21300000, guid: 0fa23ef4bf0b6ca4bbc896e6262d2c54, type: 3}
+    rewardValue: 2
+  - dayTexture: {fileID: 21300000, guid: 5186eac211df36648b4dd7d96196381c, type: 3}
+    rewardValue: 8000
+  - dayTexture: {fileID: 21300000, guid: 5186eac211df36648b4dd7d96196381c, type: 3}
+    rewardValue: 10000
+  - dayTexture: {fileID: 21300000, guid: 44f616a4ec1e2c64081a3f9664465f4d, type: 3}
+    rewardValue: 20
+  usePlaymaker: 0
+  useBolt: 0

@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3054e477350c5fc48947d672055ef51e, type: 3}
+  m_Name: SF_Mission8_Challenge2
+  m_EditorClassIdentifier: 
+  copyFileName: 0
+  challengeName: SF_Mission8_Challenge2
+  situation: 2
+  type: 4
+  parentMission: {fileID: 11400000, guid: a6655f6038fda414b809956cf4c48cf6, type: 2}
+  amountRequired: 9
+  currentAmount: 0
+  completed: 0
+  challengeIndex: 1
+  customChallengeTextID: _lvl_1_mission_8_challenge_2_text_
+  collectType: 0
+  obstacleType: 0
+  cleaningType: 0
+  percentage: 1
+  currentPercentage: 0
+  pirouettes:
+  - type: 6
+    done: 0
+  - type: 6
+    done: 0
+  inOrder: 1
+  pirouettesFoldout: 0101
+  minHeight: -3.4028235e+38
+  maxHeight: 3.4028235e+38
+  allowOtherPirouettesInTheMiddle: 1
+  distanceCharacter: -1
+  enemiesType: 0
