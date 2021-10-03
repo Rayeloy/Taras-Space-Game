@@ -8,7 +8,7 @@ using System.Collections.Generic;
 public class Sensor2D {
 
     //Slope Max Angle
-    public float maxSlopeAngle=60;
+    public float maxSlopeAngle=55;
 
 	//Basic raycast parameters;
 	public float castLength = 1f;
@@ -45,7 +45,7 @@ public class Sensor2D {
 
 	//References to attached components;
 	private Transform tr;
-	private Collider2D col;
+	public Collider2D col;
 
 	//Enum describing different types of ground detection methods;
 	[SerializeField]
@@ -53,6 +53,7 @@ public class Sensor2D {
 	{
 		Raycast,
 		RaycastArray,
+        RaycastArray2D,
 		Spherecast
 	}
 
@@ -78,8 +79,14 @@ public class Sensor2D {
 	//Whether or not to offset every other row;
 	public bool offsetArrayRows = false;
 
-	//Array containing all array raycast start positions (in local coordinates);
-	private Vector2[] raycastArrayStartPositions;
+    //Array raycast 2D settings;
+
+    //Number of rays in every row;
+    public int arrayRayCount2D = 4;
+
+
+    //Array containing all array raycast start positions (in local coordinates);
+    private Vector2[] raycastArrayStartPositions;
 
 	//Optional list of colliders to ignore when raycasting;
 	private Collider2D[] ignoreList;
@@ -89,9 +96,10 @@ public class Sensor2D {
 
 	List<Vector2> arrayNormals = new List<Vector2>();
 	List<Vector2> arrayPoints = new List<Vector2>();
+	List<float> arrayDist = new List<float>();
 
-	//Constructor;
-	public Sensor2D (Transform _transform, Collider2D _collider)
+    //Constructor;
+    public Sensor2D (Transform _transform, Collider2D _collider)
 	{
 		tr = _transform;
 
@@ -156,8 +164,8 @@ public class Sensor2D {
 		return _positions.ToArray();
 	}
 
-	//Cast a ray (or sphere or array of rays) to check for colliders;
-	public void Cast()
+    //Cast a ray (or sphere or array of rays) to check for colliders;
+    public void Cast()
 	{
 		ResetFlags();
 
@@ -182,10 +190,13 @@ public class Sensor2D {
 			case CastType.Spherecast:
 				CastSphere(_worldOrigin, _worldDirection);
 				break;
-				case CastType.RaycastArray:
-				CastRayArray(_worldOrigin, _worldDirection);
-				break;
-			default:
+            case CastType.RaycastArray:
+                CastRayArray(_worldOrigin, _worldDirection);
+                break;
+            case CastType.RaycastArray2D:                
+                CastRayArray2D(_worldOrigin, _worldDirection);
+                break;
+            default:
 				hasDetectedHit = false;
 				break;
 		}
@@ -284,8 +295,104 @@ public class Sensor2D {
 		}
 	}
 
-	//Cast a single ray into '_direction' from '_origin';
-	private void CastRay(Vector2 _origin, Vector2 _direction)
+    //Cast an array of rays into '_direction' and centered around '_origin';
+    private void CastRayArray2D(Vector3 _origin, Vector2 _direction)
+    {
+        
+        float thickness = 0.0f;
+        //Calculate origin and direction of ray in world coordinates;
+        Vector2 _rayStartPosition = _origin+(Vector3.left*col.bounds.extents.x)+Vector3.right*thickness;
+        Vector2 rayDirection = GetCastDirection();
+
+        //Clear results from last frame;
+        arrayNormals.Clear();
+        arrayPoints.Clear();
+        arrayDist.Clear();
+
+        float spacing = (col.bounds.size.x- (thickness*2)) / (arrayRayCount2D - 1);
+        //Cast array;
+        for (int i = 0; i < arrayRayCount2D; i++)
+        {
+            //Calculate ray start position;
+            Vector3 currentRayStartPosition = _rayStartPosition + Vector2.right * spacing * i;
+
+            RaycastHit2D _hit = Physics2D.Raycast(currentRayStartPosition, rayDirection, castLength, layermask);
+            if (_hit.collider != null)
+            {
+                if (isInDebugMode)
+                {
+                    Debug.DrawRay(currentRayStartPosition, Vector2.left * 0.1f, Color.yellow);
+                    Debug.DrawRay(currentRayStartPosition, rayDirection.normalized* castLength, Color.red);
+                    Debug.DrawRay(_hit.point, Vector2.Perpendicular(_hit.normal).normalized*0.1f, Color.blue);
+
+                }
+                //Debug.Log("HIT with " + _hit.collider.gameObject.name);
+                hitColliders.Add(_hit.collider);
+                hitTransforms.Add(_hit.transform);
+                arrayNormals.Add(_hit.normal);
+                arrayPoints.Add(_hit.point);
+                arrayDist.Add(_hit.distance);
+            }
+            else
+            {
+                if (isInDebugMode)
+                {
+                    Debug.DrawRay(currentRayStartPosition, rayDirection.normalized * castLength, darkRed);
+                }
+            }
+
+        }
+
+        //Evaluate results;
+        List<Vector2> auxArrayPoints = new List<Vector2>();
+
+        for (int i = 0; i < arrayPoints.Count; i++)
+        {
+            //float slopeAngle = Vector2.Angle(arrayNormals[i], Vector2.up);
+            if (/*slopeAngle <= maxSlopeAngle &&*/ arrayDist[i] > 0.05f)
+            {
+                //Debug.Log("arrayDist[i]  = " + arrayDist[i] + "; slopeAngle = " + slopeAngle);
+                auxArrayPoints.Add(arrayPoints[i]);
+            }
+        }
+        //arrayPoints.Clear();
+        arrayPoints = auxArrayPoints;
+
+        hasDetectedHit = (arrayPoints.Count > 0);
+
+        if (hasDetectedHit)
+        {
+            //Calculate average surface normal;
+            Vector2 _averageNormal = Vector2.zero;
+            foreach (Vector2 v in arrayNormals)
+            {
+                _averageNormal += v;
+            }
+
+            _averageNormal.Normalize();
+
+            //Calculate average surface point;
+            Vector2 _averagePoint = Vector2.zero;
+            for (int i = 0; i < arrayPoints.Count; i++)
+            {
+                _averagePoint += arrayPoints[i];
+            }
+            //foreach (Vector3 v in arrayPoints)
+            //{
+            //    _averagePoint += v;
+            //}
+
+            _averagePoint /= arrayPoints.Count;
+
+            hitPosition = _averagePoint;
+            hitNormal = _averageNormal;
+            hitDistance = VectorMath.ExtractDotVector2D(_origin - hitPosition, _direction).magnitude;
+            //if (hitDistance > 0) Debug.Log("hitDistance = "+ hitDistance + "; _origin = "+ _origin + "; hitPosition = " + hitPosition);
+        }
+    }
+
+    //Cast a single ray into '_direction' from '_origin';
+    private void CastRay(Vector2 _origin, Vector2 _direction)
 	{
 		RaycastHit2D _hit;
         _hit = Physics2D.Raycast(_origin, _direction, castLength, layermask);
@@ -449,4 +556,10 @@ public class Sensor2D {
         raycastArrayStartPositions = GetRaycastStartPositions(ArrayRows, arrayRayCount, offsetArrayRows, sphereCastRadius - radiusOffset);
 
     }
+
+    ////Recalculate start positions for the raycast array 2D;
+    //public void RecalibrateRaycastArrayPositions2D()
+    //{
+    //    raycastArrayStartPositions = GetRaycastStartPositions2D(ArrayRows, arrayRayCount, offsetArrayRows, sphereCastRadius);
+    //}
 }

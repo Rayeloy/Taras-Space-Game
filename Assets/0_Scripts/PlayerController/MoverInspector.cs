@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
@@ -108,6 +109,16 @@ public class MoverInspector : Editor
         else if (mover.sensorType == Sensor2D.CastType.Spherecast)
         {
 
+        }else if (mover.sensorType == Sensor2D.CastType.RaycastArray2D)
+        {
+            EditorGUI.BeginChangeCheck();
+
+            mover.arrayRayCount2D = EditorGUILayout.IntSlider("Number", mover.arrayRayCount2D, 3, 10);
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                OnEditorVariableChanged();
+            }
         }
         //else if (mover.sensorType == Sensor.CastType.RaycastArray)
         //{
@@ -146,7 +157,7 @@ public class MoverInspector : Editor
         //            EditorGUI.DrawRect(new Rect(position.x - point_size / 2f, position.y - point_size / 2f, point_size, point_size), Color.white);
         //        }
         //    }
-           
+
         //    if (raycastArrayPositions != null && raycastArrayPositions.Length != 0)
         //        GUILayout.Label("Number of rays = " + raycastArrayPositions.Length, EditorStyles.centeredGreyMiniLabel);
         //}
@@ -158,3 +169,5 @@ public class MoverInspector : Editor
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
     }
 }
+#endif
+

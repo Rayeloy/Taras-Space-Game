@@ -69,6 +69,9 @@ public class CollisionsCheck2D : MonoBehaviour
     [HideInInspector]
     Vector3 groundContactPoint = Vector3.zero;
     bool justJumped = false;
+    [Range(2,10)]
+    public int roofCheckRayNumber = 3;
+    public float maxRoofAngle = 150;
 
 
     //[Header(" -- Horizontal Collisions -- ")]
@@ -146,17 +149,20 @@ public class CollisionsCheck2D : MonoBehaviour
             groundContactPoint = mover.GetGroundPoint();
         }
 
-        if (mover.sensor.castType == Sensor2D.CastType.RaycastArray)
+        if (mover.sensor.castType == Sensor2D.CastType.RaycastArray /*|| mover.sensor.castType == Sensor2D.CastType.RaycastArray2D*/)
         {
             if (!lastBelow && below)
             {
                 //Debug.LogError("WE JUST LANDED");
-                mover.sensor.RecalibrateRaycastArrayPositions();
+                if(mover.sensor.castType == Sensor2D.CastType.RaycastArray)mover.sensor.RecalibrateRaycastArrayPositions();
+                //if (mover.sensor.castType == Sensor2D.CastType.RaycastArray2D) mover.sensor.RecalibrateRaycastArrayPositions2D();
             }
             else if (lastBelow && !below)
             {
                 //Debug.LogError("WE JUST TOOK OFF");
-                mover.sensor.RecalibrateRaycastArrayPositions(0.1f);
+                if(mover.sensor.castType == Sensor2D.CastType.RaycastArray)mover.sensor.RecalibrateRaycastArrayPositions(0.1f);
+                //if (mover.sensor.castType == Sensor2D.CastType.RaycastArray2D) mover.sensor.RecalibrateRaycastArrayPositions2D();
+
             }
         }
     }
@@ -172,6 +178,8 @@ public class CollisionsCheck2D : MonoBehaviour
         UpdateRaycastOrigins();
 
         VerticalCollisionsDistanceCheck(ref vel);
+
+        RoofCollisionCheck(ref vel);
 
         UpdateSafeBelow();
 
@@ -201,6 +209,16 @@ public class CollisionsCheck2D : MonoBehaviour
         //wallAngle = wallSlopeAngle = 0;
         //wallNormal = Vector3.zero;
 
+    }
+
+    public bool StopHorizontalOnSteepSlope(Vector3 floorNormal, Vector3 vel)
+    {
+        if (!sliping) return false;
+        float signedSlopeAngle = Vector2.SignedAngle(floorNormal, Vector3.up);
+        Debug.Log("signedSlopeAngle = " + signedSlopeAngle + "; vel.x = " + vel.x);
+        if (vel.x < 0 && signedSlopeAngle > 0) return true;
+        if (vel.x > 0 && signedSlopeAngle < 0) return true;
+        return false;
     }
     #endregion
 
@@ -265,9 +283,67 @@ public class CollisionsCheck2D : MonoBehaviour
         }
     }
 
+    void RoofCollisionCheck(ref Vector3 vel)
+    {
+        
+        float rayLength = coll.bounds.extents.y + 0.1f;
+        Vector3 rayOrigin = raycastOrigins.CenterLeft;
+        Vector3 rayDir = Vector3.up;
+        float raySpacing = (raycastOrigins.CenterRight - raycastOrigins.CenterLeft).magnitude/(roofCheckRayNumber-1);
+        RaycastHit2D hit;
+
+
+        if (vel.y > 0)
+        {
+            float[] angles = new float[roofCheckRayNumber];
+            bool atLeast1Hit = false;
+            for (int i = 0; i < roofCheckRayNumber; i++)
+            {
+                angles[i] = -1;
+                Vector3 currentRayOrigin = rayOrigin + (Vector3.right *raySpacing * i);
+                if (!disableAllRays)
+                {
+                    Debug.DrawRay(currentRayOrigin, rayDir * rayLength, Color.red);
+                }
+                if (ThrowRaycast2D(currentRayOrigin, rayDir, out hit, rayLength, collisionMask, qTI))
+                {
+                    if (CanCollide(hit))
+                    {
+                        if (hit.collider.CompareTag("Floor"))
+                        {
+                            float roofAngle = Vector3.Angle(hit.normal, Vector3.up);
+                            angles[i] = roofAngle;
+                            Debug.Log("hitting roof with angle: " + roofAngle);
+                            if (!disableAllRays) Debug.DrawRay(hit.point, Vector2.Perpendicular(hit.normal).normalized * 0.1f, Color.green);
+                            if(!atLeast1Hit) atLeast1Hit = true;
+                        }
+                    }
+                }
+            }
+            if (atLeast1Hit)
+            {
+                float averageAngle = 0;
+                int hits = 0;
+                for (int i = 0; i < angles.Length; i++)
+                {
+                    if(angles[i] > 0)
+                    {
+                        hits++;
+                        averageAngle += angles[i];
+                    }
+                }
+                averageAngle /= hits;
+                Debug.Log("ROOF AVERAGE ANGLE = " + averageAngle);
+                if(averageAngle>maxRoofAngle)
+                    above = true;
+            }
+
+        }
+    }
+
     #endregion
 
-//    #region --- HORIZONTAL COLLISIONS ---
+   #region --- HORIZONTAL COLLISIONS ---
 //    //public Collider DetectWallCollision()
 //    //{
 //    //    hitColliders = Physics.OverlapSphere(gameObject.transform.position + localStartPoint, sphereRadius, wallMask);
@@ -475,9 +551,10 @@ public class CollisionsCheck2D : MonoBehaviour
 //    //    a = new Plane(rig.velocity, origin.position);
 //    //    colliderFinal = DetectWallCollision();
 //    //}
-//    #endregion
+    #endregion
 
     #endregion
+
 
     #region --- MOVING PLATFORMS ---
     Vector3 platformMovement;
@@ -734,6 +811,8 @@ public class CollisionsCheck2D : MonoBehaviour
         raycastOrigins.BottomEnd = new Vector3(bounds.center.x, bounds.min.y, bounds.max.z);
 
         raycastOrigins.Center = bounds.center;
+        raycastOrigins.CenterLeft = new Vector2(bounds.min.x, bounds.center.y);
+        raycastOrigins.CenterRight = new Vector2(bounds.max.x, bounds.center.y);
         raycastOrigins.AroundRadius = bounds.size.z / 2;
 
     }
@@ -746,7 +825,7 @@ public class CollisionsCheck2D : MonoBehaviour
         public Vector3 BottomLFCornerReal, BottomRFCornerReal, BottomLBCornerReal, BottomRBCornerReal;
         public Vector3 TopLFCornerReal, TopRFCornerReal, TopLBCornerReal, TopRBCornerReal;
 
-        public Vector3 Center;
+        public Vector3 Center,CenterLeft, CenterRight;
         public float AroundRadius;
     }
 

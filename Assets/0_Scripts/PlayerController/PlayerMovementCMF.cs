@@ -231,7 +231,7 @@ public class PlayerMovementCMF : MonoBehaviour
         collCheck.ResetVariables();
         ResetMovementVariables();
 
-        collCheck.UpdateCollisionVariables(mover, vertMovSt, (fixedJumping && noInput));
+        collCheck.UpdateCollisionVariables(mover, vertMovSt,(fixedJumping && noInput));
 
         collCheck.UpdateCollisionChecks(currentVel);
         frameCounter++;
@@ -248,6 +248,12 @@ public class PlayerMovementCMF : MonoBehaviour
         HandleSlopes();
 
         #endregion
+        Debug.Log(" collCheck .below = " + collCheck .below+ "; collCheck.tooSteepSlope = " + collCheck.tooSteepSlope);
+        if(collCheck.StopHorizontalOnSteepSlope(mover.GetGroundNormal(), finalVel))
+        {
+            finalVel.x = 0;
+            if (finalVel.y > 0) finalVel.y = 0;
+        }
         //If the character is grounded, extend ground detection sensor range;
         mover.SetExtendSensorRange(collCheck.below);
         //Set mover velocity;
@@ -294,13 +300,15 @@ public class PlayerMovementCMF : MonoBehaviour
             Vector3 temp = new Vector3(horiz, 0, vert);
             lastJoystickSens = joystickSens;
             joystickSens = temp.magnitude;
-            if (temp.magnitude >= deadzone)
+
+            if (temp.magnitude >= deadzone && !collCheck.StopHorizontalOnSteepSlope(mover.GetGroundNormal(), temp))
             {
                 joystickSens = joystickSens >= 0.8f ? 1 : joystickSens;//Eloy: esto evita un "bug" por el que al apretar el joystick 
                                                                        //contra las esquinas no da un valor total de 1, sino de 0.9 o así
                 moveSt = MoveState.Moving;
                 currentInputDir = temp;
                 currentInputDir.Normalize();
+                RotateCharacter(temp.x >= 0);
             }
             else
             {
@@ -345,7 +353,7 @@ public class PlayerMovementCMF : MonoBehaviour
             float finalAcc = 0;
             float finalBreakAcc = collCheck.below ? breakAcc : airBreakAcc;
             float finalInitialAcc = collCheck.below ? initialAcc : airInitialAcc;
-            finalMovingAcc = (collCheck.below ? movingAcc : airMovingAcc) * rotationRestrictedPercentage; //Turning accleration
+            finalMovingAcc = (collCheck.below || collCheck.sliping ? movingAcc : airMovingAcc) * rotationRestrictedPercentage; //Turning accleration
                                                                                                           //if (!disableAllDebugs && rotationRestrictedPercentage!=1) Debug.LogWarning("finalMovingAcc = " + finalMovingAcc+ "; rotationRestrictedPercentage = " + rotationRestrictedPercentage+
                                                                                                           //    "; attackStg = " + myPlayerCombat.attackStg);
                                                                                                           //finalBreakAcc = currentSpeed < 0 ? -finalBreakAcc : finalBreakAcc;
@@ -520,11 +528,14 @@ public class PlayerMovementCMF : MonoBehaviour
             currentVel.y = Mathf.Clamp(currentVel.y, -maxFallSpeed, maxAscendSpeed);
         }
 
-        //TO REDO
-        if ((/*controller.collisions.above ||*/ collCheck.below) && !collCheck.sliping && mover.stickToGround && !collCheck.onSlide)
+        if (collCheck.above)
+        {
+            StopJump();
+            currentVel.y = 0;
+        }
+        if ((collCheck.below) && !collCheck.sliping && mover.stickToGround && !collCheck.onSlide)
         {
             currentVel.y = 0;
-            //if (controller.collisions.above) StopJump();
         }
     }
 
@@ -613,7 +624,7 @@ public class PlayerMovementCMF : MonoBehaviour
         { // verify all touches
             Touch touch = Input.GetTouch(i);
             int id = touch.fingerId;
-            Debug.Log("Touch Input! ID = " + id);
+            //Debug.Log("Touch Input! ID = " + id);
             if ((leftJoystick.joystickPressed && id == leftJoystick.touchID)) continue;
             if (touch.phase != TouchPhase.Began) continue;
 
@@ -641,7 +652,7 @@ public class PlayerMovementCMF : MonoBehaviour
         bool result = false;
         if (!noInput)
         {
-            if (((collCheck.below && !collCheck.sliping) || jumpInsurance) && !collCheck.tooSteepSlope)
+            if (((collCheck.below && !collCheck.sliping) || jumpInsurance))
             {
                 mover.stickToGround = false;
                 /*if (!disableAllDebugs) */
@@ -696,6 +707,20 @@ public class PlayerMovementCMF : MonoBehaviour
     }
     #endregion
 
+    #endregion
+
+    #region --- CHARACTER ROTATION ---
+    void RotateCharacter(bool right)
+    {
+        if (right)
+        {
+            rotateObj.localRotation = Quaternion.Euler(0, 0, 0);
+        }
+        else
+        {
+            rotateObj.localRotation = Quaternion.Euler(0, -180, 0);
+        }
+    }
     #endregion
 
     #region  CHECK WIN && GAME OVER ---------------------------------------------

@@ -61,7 +61,11 @@ public class Mover : MonoBehaviour {
     [HideInInspector]
 	public Sensor2D sensor;
 
-	void Awake()
+    //Number of rays in every row;
+    [Range(2, 10)]
+    public int arrayRayCount2D = 4;
+
+    void Awake()
 	{
 		Setup();
 
@@ -145,8 +149,8 @@ public class Mover : MonoBehaviour {
 			capsuleCollider.offset = capsuleCollider.offset + new Vector2(0f, stepHeightRatio * capsuleCollider.size.y/2f);
         capsuleCollider.size = new Vector2(capsuleCollider.size.x, capsuleCollider.size.y * (1f - stepHeightRatio));
 
-			if(capsuleCollider.size.y/2f < capsuleCollider.size.x)
-				capsuleCollider.size = new Vector2(capsuleCollider.size.y/ 2f, capsuleCollider.size.y);
+			//if(capsuleCollider.size.y/2f < capsuleCollider.size.x)
+			//	capsuleCollider.size = new Vector2(capsuleCollider.size.y/ 2f, capsuleCollider.size.y);
 		}
 
 		//Recalibrate sensor variables to fit new collider dimensions;
@@ -156,6 +160,8 @@ public class Mover : MonoBehaviour {
 	//Recalibrate sensor variables;
 	void RecalibrateSensor()
 	{
+        sensor.col = col;
+
 		//Set sensor ray origin and direction;
 		sensor.SetCastOrigin(GetColliderCenter());
 		sensor.SetCastDirection(Sensor2D.CastDirection.Down);
@@ -166,6 +172,8 @@ public class Mover : MonoBehaviour {
 		//Set sensor cast type and layermask;
 		sensor.castType = sensorType;
 		sensor.layermask = sensorLayermask;
+
+        sensor.arrayRayCount2D = arrayRayCount2D;
 
 		//Calculate sensor radius/width;
 		float _radius = colliderThickness/2f * sensorRadiusModifier;
@@ -258,6 +266,11 @@ public class Mover : MonoBehaviour {
 
         //if (stickToGround && isGrounded && slopeAngle <= 60)
             currentGroundAdjustmentVelocity = instantGroundAdjustment && onMovingPlatform? tr.up * _distanceToGo : tr.up * (_distanceToGo/Time.fixedDeltaTime);
+        if (_distanceToGo > 0.1f)
+        {
+                Debug.LogError("DistanceToGo = " + _distanceToGo+ "; _middle = "+ _middle + "; _upperLimit = "+ _upperLimit +
+                    "; colliderHeight = "+ colliderHeight + "; stepHeightRatio = " + stepHeightRatio);
+        }
         if((!stickToGround && currentGroundAdjustmentVelocity.y < 0) || isGroundTooSteep)
         {
             currentGroundAdjustmentVelocity.y = 0;
