@@ -453,7 +453,6 @@ public class MenuTiendaScript : MonoBehaviour
     public void ThisStart(Color veilColor, float veilAlpha = 0.6f, ShopMenuSections _startingSection = ShopMenuSections.GemStore)
     {
         if (!gameObject.activeInHierarchy) gameObject.SetActive(true);
-        UpdateCounters();
         transform.localPosition = Vector3.zero;
 
         ChangeVeil(veilAlpha, veilColor);
@@ -841,7 +840,6 @@ public class MenuTiendaScript : MonoBehaviour
             {
                 Debug.Log("Show Normal Results");
                 GetRewardsForRealAndShowResultPopUp();
-                UpdateCounters();
             }
             else
             {
@@ -856,31 +854,10 @@ public class MenuTiendaScript : MonoBehaviour
             {
                 switch (currentShopMenuIconData.productID)
                 {
-                    case RewardType.DineroReal_VIP:
-                        //GeneralPauseScript.pause.ShowPopUp("_ui_tienda_result_vip_", GeneralPauseScript.pause.Nothing, PopupMode.Ok);
-                        currentShopMenuIconData.GetRewards(true);
-                        UpdateShopMenuIconsInGame();
-                        break;
-                    case RewardType.DineroReal_GrandesRecompensas:
-                        //GeneralPauseScript.pause.ShowPopUp("_ui_tienda_result_grandes_recompensas_", GeneralPauseScript.pause.Nothing, PopupMode.Ok);
-                        currentShopMenuIconData.GetRewards(true);
-                        UpdateShopMenuIconsInGame();
-                        break;
-                    case RewardType.DineroReal_ComidaIlimitada:
-                        //GeneralPauseScript.pause.ShowPopUp("_ui_tienda_result_comida_ilimitada_", GeneralPauseScript.pause.Nothing, PopupMode.Ok);
-                        currentShopMenuIconData.GetRewards(true);
-                        UpdateShopMenuIconsInGame();
-                        break;
-                    case RewardType.DineroReal_JuegoCompleto:
-                        //GeneralPauseScript.pause.ShowPopUp("_ui_tienda_result_juego_completo_", GeneralPauseScript.pause.Nothing, PopupMode.Ok);
-                        currentShopMenuIconData.GetRewards(true);
-                        UpdateShopMenuIconsInGame();
-                        break;
                     default:
                         GetRewardsForRealAndShowResultPopUp(true);
                         break;
                 }
-                UpdateCounters();
             }
             else
             {
@@ -1039,7 +1016,6 @@ public class MenuTiendaScript : MonoBehaviour
         MasterManager.GameResourcesManager.SonidoMoneda();
         //if (GeneralPauseScript.pause.doingMachineTutorial3) FinishTutorial();
         StartClosingAreYouSure();
-        UpdateCounters();
     }
 
     bool closingAreYouSureStarted = false;
@@ -1457,16 +1433,5 @@ public class MenuTiendaScript : MonoBehaviour
             }
         }
         return null;
-    }
-
-    public void SonidoClick()
-    {
-        MasterManager.GameResourcesManager.SonidoClick();
-    }
-
-    void UpdateCounters()
-    {
-        coinsCounterText.text = MasterManager.GameDataManager.GetReward(RewardType.Monedas).ToString();
-        //gemsCounterText.text = MasterManager.GameDataManager.GetTotalGemsAmount().ToString();
     }
 }

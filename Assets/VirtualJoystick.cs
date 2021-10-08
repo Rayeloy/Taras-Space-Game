@@ -5,21 +5,43 @@ using UnityEngine.UI;
 
 public class VirtualJoystick : MonoBehaviour
 {
-    public RectTransform joystickBackground;
+    public RectTransform joystickPressingArea;
     public RectTransform joystickImage;
+    public RectTransform joystickOuterRing;
+    public RectTransform arrow;
     Button joystickButton;
 
-
+    public float deadZone = 0.2f;
     public Vector2 joystickInput;
 
     public bool joystickPressed = false;
     public int touchID = -1;
-    List<int> oldTouchIDs;
+    public List<int> oldTouchIDs;
+
+    Color joystickOriginalColor, ringOriginalColor;
+    Color joystickTransparentColor, ringTransparentColor;
+
+    Vector3 joystickRingOriginalPos;
+
+    public delegate void SinglePress();
+    public event SinglePress OnSinglePress;
+    public float maxSinglePressTime = 0.3f;
+    float pressedTime = 0;
 
     private void Awake()
     {
         joystickButton = joystickImage.GetComponent<Button>();
         oldTouchIDs = new List<int>();
+
+        joystickOriginalColor = joystickImage.GetComponent<Image>().color;
+        ringOriginalColor = joystickOuterRing.GetComponent<Image>().color;
+        joystickTransparentColor = new Color(joystickOriginalColor.r, joystickOriginalColor.g, joystickOriginalColor.b, 0.2f);
+        ringTransparentColor = new Color(ringOriginalColor.r, ringOriginalColor.g, ringOriginalColor.b, 0.1f);
+        joystickImage.GetComponent<Image>().color = joystickTransparentColor;
+        joystickOuterRing.GetComponent<Image>().color = ringTransparentColor;
+
+        joystickRingOriginalPos = joystickOuterRing.localPosition;
+        arrow.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -30,10 +52,10 @@ public class VirtualJoystick : MonoBehaviour
         }
         else
         {
-            oldTouchIDs = new List<int>();
+            oldTouchIDs.Clear();
             for (int i = 0; i < Input.touchCount; i++)
             {
-                oldTouchIDs.Add(Input.GetTouch(0).fingerId);
+                oldTouchIDs.Add(Input.GetTouch(i).fingerId);
             }
         }
     }
@@ -42,8 +64,7 @@ public class VirtualJoystick : MonoBehaviour
     {
         if (!joystickPressed)
         {
-            Debug.Log("Joystick Pressed");
-
+            //Debug.Log("Joystick Pressed");
             int count = Input.touchCount;
             bool found = false;
             Vector2 localPoint = Vector2.zero;
@@ -52,11 +73,11 @@ public class VirtualJoystick : MonoBehaviour
             { // verify all touches
                 Touch touch = Input.GetTouch(i);
                 if (oldTouchIDs.Contains(touch.fingerId)) continue;
-                // if touch inside some button Rect, set the corresponding value
 
-                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(joystickBackground, touch.position, null, out localPoint))
+                //Is the touch input inside the rect of joystickBackground?
+                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(joystickPressingArea, touch.position, null, out localPoint))
                 {
-                    if (localPoint.magnitude <= joystickBackground.rect.width / 2)
+                    if (localPoint.magnitude <= joystickPressingArea.rect.width)
                     {
                         found = true;
                         touchID = touch.fingerId;
@@ -64,9 +85,16 @@ public class VirtualJoystick : MonoBehaviour
                 }
             }
 
-            if (found)
+            if (found)//PRESS JOYSTICK
             {
                 joystickPressed = true;
+                pressedTime = 0;
+                //Move the whole joystick to the touch position
+                joystickOuterRing.localPosition = localPoint;
+
+                //Set Pressed Colors
+                joystickImage.GetComponent<Image>().color = joystickOriginalColor;
+                joystickOuterRing.GetComponent<Image>().color = ringOriginalColor;
             }
         }
     }
@@ -75,16 +103,25 @@ public class VirtualJoystick : MonoBehaviour
     {
         if (joystickPressed)
         {
+            if (pressedTime <= maxSinglePressTime && OnSinglePress != null) OnSinglePress();
             joystickPressed = false;
-            Debug.Log("Joystick Released");
+            //Debug.Log("Joystick Released");
             joystickInput = Vector3.zero;
             joystickImage.transform.localPosition = Vector3.zero;
             touchID = -1;
+            joystickImage.GetComponent<Image>().color = joystickTransparentColor;
+            joystickOuterRing.GetComponent<Image>().color = ringTransparentColor;
+
+            joystickOuterRing.localPosition = joystickRingOriginalPos;
+
+            if (arrow.gameObject.activeInHierarchy) arrow.gameObject.SetActive(false);
+
         }
     }
 
     void UpdateJoystickPosition()
     {
+        pressedTime += Time.deltaTime;
         int count = Input.touchCount;
         Vector2 localPoint = Vector2.zero;
         Touch touch = new Touch();
@@ -102,18 +139,29 @@ public class VirtualJoystick : MonoBehaviour
             ReleaseJoystick();
             return;
         }
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(joystickBackground, touch.position, null, out localPoint);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(joystickOuterRing, touch.position, null, out localPoint);
 
-        if (localPoint.magnitude > joystickBackground.rect.width * 0.4f)
+        if (localPoint.magnitude > joystickOuterRing.rect.width * 0.4f)
         {
-            localPoint = localPoint.normalized * (joystickBackground.rect.width * 0.4f);
+            localPoint = localPoint.normalized * (joystickOuterRing.rect.width * 0.4f);
         }
         joystickImage.localPosition = localPoint;
-        float xInput = localPoint.x / (joystickBackground.rect.width * 0.4f);
-        float yInput = localPoint.y / (joystickBackground.rect.width * 0.4f);
+        float xInput = localPoint.x / (joystickOuterRing.rect.width * 0.4f);
+        float yInput = localPoint.y / (joystickOuterRing.rect.width * 0.4f);
         //Debug.Log("Joystick pressed: localPoint.x = " + localPoint.x + "; localPoint.y = " + localPoint.y + ";  joystickBackground.rect.width * 0.4f= " + (joystickBackground.rect.width * 0.4f));
 
         joystickInput = new Vector2(xInput, yInput);
+
+        if (joystickInput.magnitude >= deadZone)
+        {
+            if (!arrow.gameObject.activeInHierarchy) arrow.gameObject.SetActive(true);
+            float arrowAngle = Vector2.SignedAngle(Vector2.right, joystickInput);
+            joystickImage.rotation = Quaternion.Euler(0, 0, arrowAngle);
+        }
+        else
+        {
+            if (arrow.gameObject.activeInHierarchy) arrow.gameObject.SetActive(false);
+        }
     }
 
 }

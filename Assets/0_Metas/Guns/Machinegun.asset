@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bc8fb0d32405f94ea04f80d94421f5c, type: 3}
+  m_Name: Machinegun
+  m_EditorClassIdentifier: 
+  unlocked: 1
+  gunType: 2
+  firingMode: 2
+  bulletsPerShot: 1
+  maxRange: 30
+  shootFrequency: 0.1
+  shootingKnockback: 1
+  spreadAngle: 1
+  spreadType: 2
+  burstAmount: 3
+  maxAmmoCapacity: 200
+  maxClipSize: 30
+  reloadMaxTime: 2
+  bulletDamage: 2
+  bulletSpeed: 25
+  bulletDropForce: 0
+  bulletPrefab: {fileID: 6656462881126542585, guid: 700828bec299c53478188e9ed9f2f9b4, type: 3}
+  spineWeaponName: 
+  currentBulletsInClip: 24

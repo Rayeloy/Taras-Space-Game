@@ -266,11 +266,11 @@ public class Mover : MonoBehaviour {
 
         //if (stickToGround && isGrounded && slopeAngle <= 60)
             currentGroundAdjustmentVelocity = instantGroundAdjustment && onMovingPlatform? tr.up * _distanceToGo : tr.up * (_distanceToGo/Time.fixedDeltaTime);
-        if (_distanceToGo > 0.1f)
-        {
-                Debug.LogError("DistanceToGo = " + _distanceToGo+ "; _middle = "+ _middle + "; _upperLimit = "+ _upperLimit +
-                    "; colliderHeight = "+ colliderHeight + "; stepHeightRatio = " + stepHeightRatio);
-        }
+        //if (_distanceToGo > 0.1f)
+        //{
+        //        Debug.LogError("DistanceToGo = " + _distanceToGo+ "; _middle = "+ _middle + "; _upperLimit = "+ _upperLimit +
+        //            "; colliderHeight = "+ colliderHeight + "; stepHeightRatio = " + stepHeightRatio);
+        //}
         if((!stickToGround && currentGroundAdjustmentVelocity.y < 0) || isGroundTooSteep)
         {
             currentGroundAdjustmentVelocity.y = 0;

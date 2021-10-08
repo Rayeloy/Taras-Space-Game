@@ -84,7 +84,6 @@ public class Sensor2D {
     //Number of rays in every row;
     public int arrayRayCount2D = 4;
 
-
     //Array containing all array raycast start positions (in local coordinates);
     private Vector2[] raycastArrayStartPositions;
 

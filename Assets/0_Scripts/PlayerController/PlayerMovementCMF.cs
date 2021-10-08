@@ -27,6 +27,7 @@ public enum VerticalMovementState
     Jumping,
     JumpBreaking,//Emergency stop
     Falling,
+    Jetpack
 }
 
 public enum ForceType
@@ -48,6 +49,9 @@ public class PlayerMovementCMF : MonoBehaviour
     public Mover mover;
     public VirtualJoystick leftJoystick;
     public LayerMask UILayerMask;
+    public PlayerJetpack myPlayerJetpack;
+    public PlayerAnimations myPlayerAnimations;
+    public PlayerWeapon myPlayerWeapon;
 
 
     public Transform cameraFollow;
@@ -107,9 +111,10 @@ public class PlayerMovementCMF : MonoBehaviour
     public float pressingJumpActiveProportion = 0.7f;
     public float maxTimeJumpInsurance = 0.2f;
     float timeJumpInsurance = 0;
-    bool jumpInsurance;
-    bool jumpingFromWater;
-
+    [HideInInspector]
+    public bool jumpInsurance;
+    [HideInInspector]
+    public int jumpTouchID = -1;
 
 
 
@@ -122,14 +127,12 @@ public class PlayerMovementCMF : MonoBehaviour
     public bool noInput = false;
 
     //MOVIMIENTO
-    [HideInInspector]
+    [Header("--- READ ONLY ---")]
     public MoveState moveSt = MoveState.NotMoving;
-    [HideInInspector]
     public Vector3 currentVel;
     Vector3 oldCurrentVel;
     Vector3 finalVel;
 
-    [HideInInspector]
     public float currentSpeed = 0;
     //[HideInInspector]
     //public Vector3 currentMovDir;//= a currentInputDir??? 
@@ -156,7 +159,6 @@ public class PlayerMovementCMF : MonoBehaviour
     float joystickSens = 0;
 
     //JUMP
-    [HideInInspector]
     public VerticalMovementState vertMovSt = VerticalMovementState.None;
     [HideInInspector]
     public bool wallJumpAnim = false;
@@ -179,7 +181,6 @@ public class PlayerMovementCMF : MonoBehaviour
         mover = GetComponent<Mover>();
         collCheck.KonoAwake(mover.capsuleCollider);//we use capsule collider in our example
 
-        maxMoveSpeed = 10;
         currentSpeed = 0;
         noInput = false;
 
@@ -189,6 +190,9 @@ public class PlayerMovementCMF : MonoBehaviour
     //todos los konoAwakes
     void PlayerAwakes()
     {
+        myPlayerJetpack.KonoAwake();
+        myPlayerAnimations.KonoAwake();
+        myPlayerWeapon.KonoAwake();
     }
     #endregion
 
@@ -216,7 +220,11 @@ public class PlayerMovementCMF : MonoBehaviour
     #region UPDATE
     public void KonoUpdate()
     {
-        CheckForJumpInput();
+        CheckForScreenPress();
+        CheckForScreenRelease();
+        myPlayerJetpack.KonoUpdate();
+        myPlayerAnimations.KonoUpdate();
+        myPlayerWeapon.KonoUpdate();
     }
 
     public void KonoFixedUpdate()
@@ -248,12 +256,6 @@ public class PlayerMovementCMF : MonoBehaviour
         HandleSlopes();
 
         #endregion
-        Debug.Log(" collCheck .below = " + collCheck .below+ "; collCheck.tooSteepSlope = " + collCheck.tooSteepSlope);
-        if(collCheck.StopHorizontalOnSteepSlope(mover.GetGroundNormal(), finalVel))
-        {
-            finalVel.x = 0;
-            if (finalVel.y > 0) finalVel.y = 0;
-        }
         //If the character is grounded, extend ground detection sensor range;
         mover.SetExtendSensorRange(collCheck.below);
         //Set mover velocity;
@@ -308,7 +310,7 @@ public class PlayerMovementCMF : MonoBehaviour
                 moveSt = MoveState.Moving;
                 currentInputDir = temp;
                 currentInputDir.Normalize();
-                RotateCharacter(temp.x >= 0);
+                if(myPlayerWeapon.weaponSt != WeaponState.Aiming || myPlayerWeapon.weaponSt != WeaponState.Shooting)RotateCharacter(temp.x >= 0);
             }
             else
             {
@@ -519,6 +521,11 @@ public class PlayerMovementCMF : MonoBehaviour
                 }
                 currentVel.y += (currentGravity * breakJumpForce) * Time.deltaTime;
                 break;
+            case VerticalMovementState.Jetpack:
+                float currentJetpackForce = currentVel.y < 0? myPlayerJetpack.jetpackForce * 3: myPlayerJetpack.jetpackForce;
+                currentVel.y += (currentGravity + currentJetpackForce) * Time.deltaTime;
+                currentVel.y = Mathf.Clamp(currentVel.y, -maxFallSpeed, myPlayerJetpack.jetpackMaxSpeed);
+                break;
 
         }
         ProcessJumpInsurance();
@@ -537,28 +544,14 @@ public class PlayerMovementCMF : MonoBehaviour
         {
             currentVel.y = 0;
         }
-    }
 
-
-    #region -- VerticalImpulse --
-
-    public void StartVerticalImpulse(float ySpeed, ForceType forceType)
-    {
-        switch (forceType)
+        //Debug.Log(" collCheck .below = " + collCheck.below + "; collCheck.tooSteepSlope = " + collCheck.tooSteepSlope);
+        if (collCheck.StopHorizontalOnSteepSlope(mover.GetGroundNormal(), finalVel))
         {
-            default:
-            case ForceType.Forced:
-                currentVel.y = ySpeed;
-                break;
-            case ForceType.Additive:
-                currentVel.y += ySpeed;
-                break;
+            finalVel.x = 0;
+            if (finalVel.y > 0) finalVel.y = 0;
         }
-        mover.stickToGround = false;
-        collCheck.below = false;
-        vertMovSt = VerticalMovementState.None;
     }
-    #endregion
 
     void ResetJumpState()
     {
@@ -609,12 +602,13 @@ public class PlayerMovementCMF : MonoBehaviour
         Debug.Log("TRY JUMP");
         if (!StartJump())
         {
-            Debug.Log("FAILED JUMP... TRY WALLJUMP");
+            Debug.Log("FAILED JUMP... TRY JETPACK");
+            myPlayerJetpack.StartJetpack();
         }
     }
 
     #region --- Jump ---
-    void CheckForJumpInput()
+    void CheckForScreenPress()
     {
         int count = Input.touchCount;
         bool found = false;
@@ -625,7 +619,8 @@ public class PlayerMovementCMF : MonoBehaviour
             Touch touch = Input.GetTouch(i);
             int id = touch.fingerId;
             //Debug.Log("Touch Input! ID = " + id);
-            if ((leftJoystick.joystickPressed && id == leftJoystick.touchID)) continue;
+            if ((leftJoystick.joystickPressed && id == leftJoystick.touchID) || (myPlayerWeapon.virtualJoystickRight.joystickPressed && id == myPlayerWeapon.virtualJoystickRight.touchID))
+                continue;
             if (touch.phase != TouchPhase.Began) continue;
 
             if (EventSystem.current.IsPointerOverGameObject(id))
@@ -636,6 +631,7 @@ public class PlayerMovementCMF : MonoBehaviour
             else 
             {
                 found = true;
+                jumpTouchID = id;
             }
             //// if touch inside some button Rect, set the corresponding value
             //if( Physics.Raycast(new Ray(touch.position, Vector3.forward),100, UILayerMask))
@@ -644,6 +640,31 @@ public class PlayerMovementCMF : MonoBehaviour
         if (found)
         {
             PressA();
+        }
+    }
+
+    void CheckForScreenRelease()
+    {
+        if (jumpTouchID != -1)
+        {
+            int count = Input.touchCount;
+            bool found = false;
+            Vector2 localPoint = Vector2.zero;
+
+            for (int i = 0; i < count && !found; i++)
+            { // verify all touches
+                Touch touch = Input.GetTouch(i);
+                int id = touch.fingerId;
+                if(id == jumpTouchID)
+                {
+                    found = true;
+                }
+            }
+            if (!found)
+            {
+                StopJump();
+                myPlayerJetpack.EndJetpack();
+            }
         }
     }
 
@@ -674,7 +695,7 @@ public class PlayerMovementCMF : MonoBehaviour
         return result;
     }
 
-    void StopJump()
+    public void StopJump()
     {
         //myPlayerAnimation.SetJump(false);
         vertMovSt = VerticalMovementState.None;
@@ -707,10 +728,11 @@ public class PlayerMovementCMF : MonoBehaviour
     }
     #endregion
 
+
     #endregion
 
     #region --- CHARACTER ROTATION ---
-    void RotateCharacter(bool right)
+    public void RotateCharacter(bool right)
     {
         if (right)
         {

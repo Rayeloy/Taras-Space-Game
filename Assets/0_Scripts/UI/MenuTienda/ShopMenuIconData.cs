@@ -98,12 +98,6 @@ public class ShopMenuIconData : ScriptableObject
                         {
                             return false;
                         }
-                    case RewardType.Gemas:
-                        //if (MasterManager.GameDataManager.GetTotalGemsAmount() < totalPrice)
-                        //{
-                        //    result = false;
-                        //}
-                        break;
                     default:
                         if (totalPrice > MasterManager.GameDataManager.GetReward(priceCurrency))
                         {

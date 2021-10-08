@@ -106,7 +106,6 @@ public class MenuOpcionesScript : MonoBehaviour
             //    ChangeOptionsSection(0);
             //}
         }
-        if (MasterManager.GameDataManager.openOptionsOnStart >= 0) MasterManager.GameDataManager.openOptionsOnStart = -1;
         state = OptionsMenuState.Opening;
         openingTime = 0;
     }
@@ -436,7 +435,6 @@ public class MenuOpcionesScript : MonoBehaviour
 
     public void RestoreShop()
     {
-        MasterManager.GameDataManager.RestoreRealMoneyShop();
     }
 
     public void ResetDataButton()
@@ -549,8 +547,6 @@ public class MenuOpcionesScript : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        MasterManager.GameDataManager.openOptionsOnStart = -1;
-        MasterManager.GameDataManager.cutsceneReplayOn = false;
     }
 
     //Stats

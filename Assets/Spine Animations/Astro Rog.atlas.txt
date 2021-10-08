@@ -1,139 +1,146 @@
 
 Astro Rog.png
-size: 1528,334
+size: 1571,731
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 Capa 1
-  rotate: true
-  xy: 1182, 4
+  rotate: false
+  xy: 1268, 241
   size: 145, 164
   orig: 146, 164
   offset: 0, 0
   index: -1
 Capa 2
   rotate: false
-  xy: 1347, 199
+  xy: 1089, 106
   size: 121, 133
   orig: 121, 133
   offset: 0, 0
   index: -1
 b_baseHand
-  rotate: true
-  xy: 1470, 236
+  rotate: false
+  xy: 897, 42
   size: 47, 53
   orig: 66, 67
   offset: 2, 10
   index: -1
 b_finger1
-  rotate: true
-  xy: 883, 3
+  rotate: false
+  xy: 1212, 138
   size: 19, 21
   orig: 20, 22
   offset: 0, 0
   index: -1
 b_finger2
-  rotate: true
-  xy: 1405, 172
+  rotate: false
+  xy: 1270, 215
   size: 25, 24
   orig: 27, 24
   offset: 0, 0
   index: -1
 b_finger3
-  rotate: true
-  xy: 1431, 172
+  rotate: false
+  xy: 897, 16
   size: 25, 24
   orig: 28, 28
   offset: 0, 3
   index: -1
 b_finger4
-  rotate: true
-  xy: 1457, 173
+  rotate: false
+  xy: 946, 74
   size: 24, 21
   orig: 24, 22
   offset: 0, 0
   index: -1
 b_finger5
-  rotate: true
-  xy: 906, 2
+  rotate: false
+  xy: 1235, 172
   size: 20, 18
   orig: 20, 19
   offset: 0, 1
   index: -1
 b_leg_top
   rotate: false
-  xy: 1438, 18
+  xy: 1415, 253
   size: 86, 152
   orig: 137, 152
   offset: 51, 0
   index: -1
 body
-  rotate: true
-  xy: 1182, 151
-  size: 181, 163
-  orig: 264, 303
-  offset: 38, 140
+  rotate: false
+  xy: 1089, 241
+  size: 177, 164
+  orig: 263, 303
+  offset: 42, 139
   index: -1
 f_baseHand
   rotate: false
-  xy: 1470, 285
+  xy: 1212, 192
   size: 56, 47
   orig: 68, 56
   offset: 0, 9
   index: -1
 f_finger1
-  rotate: true
-  xy: 860, 2
+  rotate: false
+  xy: 1530, 384
   size: 20, 21
   orig: 20, 21
   offset: 0, 0
   index: -1
 f_finger2
-  rotate: true
-  xy: 833, 3
+  rotate: false
+  xy: 1503, 350
   size: 19, 25
   orig: 19, 25
   offset: 0, 0
   index: -1
 f_finger3
   rotate: false
-  xy: 1347, 169
+  xy: 1503, 377
   size: 25, 28
   orig: 25, 29
   offset: 0, 1
   index: -1
 f_finger4
-  rotate: true
-  xy: 1374, 176
+  rotate: false
+  xy: 1212, 161
   size: 21, 29
   orig: 21, 29
   offset: 0, 0
   index: -1
 f_finger5
-  rotate: true
-  xy: 926, 6
+  rotate: false
+  xy: 1270, 192
   size: 16, 21
   orig: 16, 21
   offset: 0, 0
   index: -1
 f_leg_top
-  rotate: false
-  xy: 1348, 12
+  rotate: true
+  xy: 740, 7
   size: 88, 155
   orig: 93, 155
   offset: 5, 0
   index: -1
 head
   rotate: false
-  xy: 833, 24
+  xy: 740, 97
   size: 347, 308
   orig: 347, 308
   offset: 0, 0
   index: -1
 image0
   rotate: false
-  xy: 2, 11
-  size: 829, 321
-  orig: 1052, 744
-  offset: 11, 174
+  xy: 740, 407
+  size: 829, 322
+  orig: 853, 331
+  offset: 9, 3
+  index: -1
+jetpack_png
+  rotate: true
+  xy: 2, 2
+  size: 727, 736
+  orig: 744, 745
+  offset: 15, 1
   index: -1

@@ -215,7 +215,7 @@ public class CollisionsCheck2D : MonoBehaviour
     {
         if (!sliping) return false;
         float signedSlopeAngle = Vector2.SignedAngle(floorNormal, Vector3.up);
-        Debug.Log("signedSlopeAngle = " + signedSlopeAngle + "; vel.x = " + vel.x);
+        //Debug.Log("signedSlopeAngle = " + signedSlopeAngle + "; vel.x = " + vel.x);
         if (vel.x < 0 && signedSlopeAngle > 0) return true;
         if (vel.x > 0 && signedSlopeAngle < 0) return true;
         return false;
@@ -313,7 +313,7 @@ public class CollisionsCheck2D : MonoBehaviour
                         {
                             float roofAngle = Vector3.Angle(hit.normal, Vector3.up);
                             angles[i] = roofAngle;
-                            Debug.Log("hitting roof with angle: " + roofAngle);
+                            //Debug.Log("hitting roof with angle: " + roofAngle);
                             if (!disableAllRays) Debug.DrawRay(hit.point, Vector2.Perpendicular(hit.normal).normalized * 0.1f, Color.green);
                             if(!atLeast1Hit) atLeast1Hit = true;
                         }
@@ -333,7 +333,7 @@ public class CollisionsCheck2D : MonoBehaviour
                     }
                 }
                 averageAngle /= hits;
-                Debug.Log("ROOF AVERAGE ANGLE = " + averageAngle);
+                //Debug.Log("ROOF AVERAGE ANGLE = " + averageAngle);
                 if(averageAngle>maxRoofAngle)
                     above = true;
             }
