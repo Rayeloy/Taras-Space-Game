@@ -18,9 +18,13 @@ public class PlayerJetpack : MonoBehaviour
     public float jetpackRefillPerTick = 5;
     public float jetpackRefillFrequency = 0.5f;
 
-    private float currentFuel = 100;
+    [HideInInspector]
+    public float currentFuel = 100;
 
     private bool jetpackStarted = false;
+
+    public ParticleSystem jetpackParticles;
+    public GameObject jetpackLight;
 
 
     private PlayerMovementCMF myPlayerMov;
@@ -29,6 +33,8 @@ public class PlayerJetpack : MonoBehaviour
     {
         myPlayerMov = GetComponent<PlayerMovementCMF>();
         currentFuel = totalFuel;
+        jetpackLight.SetActive(false);
+
     }
 
     public void KonoUpdate()
@@ -62,6 +68,8 @@ public class PlayerJetpack : MonoBehaviour
             myPlayerMov.vertMovSt = VerticalMovementState.Jetpack;
             jetpackConsumptionCurrentTime = 0;
             Debug.Log("START JETPACK");
+            jetpackParticles.Play(true);
+            jetpackLight.SetActive(true);
 
         }
     }
@@ -106,6 +114,9 @@ public class PlayerJetpack : MonoBehaviour
             jetpackStarted = false;
             myPlayerMov.vertMovSt = VerticalMovementState.None;//Is this correct?
             jetpackConsumptionCurrentTime = 0;
+            jetpackParticles.Stop(true);
+            jetpackLight.SetActive(false);
+
         }
     }
 }

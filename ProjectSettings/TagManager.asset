@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Floor
   - PlayerBullet
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -40,12 +41,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 2695149891
+    locked: 0
+  - name: Middleground-1
+    uniqueID: 505630859
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Middleground
+    uniqueID: 2639603373
+    locked: 0
   - name: Foreground
     uniqueID: 4214545871
-    locked: 0
-  - name: Background
-    uniqueID: 2695149891
     locked: 0

@@ -42,7 +42,7 @@ public enum ForceType
 #endregion
 public class PlayerMovementCMF : MonoBehaviour
 {
-
+    public static PlayerMovementCMF instance;
     [Header(" --- Referencias --- ")]
     //public PlayerCombat myPlayerCombat;
     public CollisionsCheck2D collCheck;
@@ -52,6 +52,7 @@ public class PlayerMovementCMF : MonoBehaviour
     public PlayerJetpack myPlayerJetpack;
     public PlayerAnimations myPlayerAnimations;
     public PlayerWeapon myPlayerWeapon;
+    public PlayerVFX myPlayerVFX;
 
 
     public Transform cameraFollow;
@@ -178,7 +179,14 @@ public class PlayerMovementCMF : MonoBehaviour
 
     public void KonoAwake(bool isMyCharacter = false)
     {
-        mover = GetComponent<Mover>();
+        if (instance == null) instance = this;
+        else
+        {
+            Destroy(this);
+            return;
+        }
+
+         mover = GetComponent<Mover>();
         collCheck.KonoAwake(mover.capsuleCollider);//we use capsule collider in our example
 
         currentSpeed = 0;
@@ -193,6 +201,7 @@ public class PlayerMovementCMF : MonoBehaviour
         myPlayerJetpack.KonoAwake();
         myPlayerAnimations.KonoAwake();
         myPlayerWeapon.KonoAwake();
+        myPlayerVFX.KonoAwake();
     }
     #endregion
 
@@ -213,6 +222,7 @@ public class PlayerMovementCMF : MonoBehaviour
     private void PlayerStarts()
     {
         collCheck.KonoStart();
+        myPlayerWeapon.KonoStart();
     }
 
     #endregion
@@ -684,6 +694,8 @@ public class PlayerMovementCMF : MonoBehaviour
                 timePressingJump = 0;
                 collCheck.StartJump();
                 //StopBufferedInput(PlayerInput.WallJump);
+                myPlayerAnimations.skeletonAnim.Skeleton.SetAttachment("weapon", null);
+
             }
         }
 
@@ -742,6 +754,7 @@ public class PlayerMovementCMF : MonoBehaviour
         {
             rotateObj.localRotation = Quaternion.Euler(0, -180, 0);
         }
+        myPlayerWeapon.ResetAimPosition();
     }
     #endregion
 

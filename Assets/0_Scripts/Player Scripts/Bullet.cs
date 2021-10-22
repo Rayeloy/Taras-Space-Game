@@ -39,7 +39,7 @@ public class Bullet : MonoBehaviour
         lifeTime += Time.deltaTime;
 
         float distanceTravelled = (transform.position - originalPos).magnitude;
-        Debug.Log("distanceTravelled = " + distanceTravelled + "; range = " + range+ "; originalPos = "+ originalPos + "; transform.position = " + transform.position);
+        //Debug.Log("distanceTravelled = " + distanceTravelled + "; range = " + range+ "; originalPos = "+ originalPos + "; transform.position = " + transform.position);
 
         if (distanceTravelled >= range)
         {
@@ -64,7 +64,7 @@ public class Bullet : MonoBehaviour
         //Explosion?
 
         Destroy(gameObject);
-        Debug.Log("Destroy bullet!");
+        //Debug.Log("Destroy bullet!");
         return;
     }
 
@@ -78,7 +78,7 @@ public class Bullet : MonoBehaviour
         }
         else if(!other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Bullet collided with " + other.gameObject.name);
+            //Debug.Log("Bullet collided with " + other.gameObject.name);
             Destroy();
             return;
         }

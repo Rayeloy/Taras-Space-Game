@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fea1a9b602d2ec499c8eccee628c1d7, type: 3}
+  m_Name: AlphaDisappear
+  m_EditorClassIdentifier: 
+  baseUIAnimation:
+    animName: 
+    baseSettings: {fileID: 0}
+    type: 2
+    playing: 0
+    transf: {fileID: 0}
+    forcePlay: 0
+    duration: 0
+    endless: 1
+    cycleAnimDir: 1
+    frequency: 0.5
+    cycleStartPoint: 0
+    easeFunction: 21
+    playBack: 0
+    ignoreTimeScale: 0
+    stopOnSceneChange: 1
+    forceScaleTo1If0: 0
+    xAmplitude: 0
+    currentXAmplitude: 0
+    initialIntensity: 0
+    finalIntensity: 0
+    alphaMin: 1
+    alphaMax: 0
+    recursive: 0
+    initialScale: 0
+    finalScale: 0
+    originalScale: {x: 0, y: 0}
+    automaticInitialPos: 0
+    useAsIncrement: 0
+    initialPos: {x: 0, y: 0}
+    finalPos: {x: 0, y: 0}
+    initialRot: {x: 0, y: 0, z: 0}
+    finalRot: {x: 0, y: 0, z: 0}
+    alwaysRotateInSameDirection: 0
+    buttonPressesNeeded: 0
+    useBlackVeil: 0
+    handPosition: 0
+    children: []

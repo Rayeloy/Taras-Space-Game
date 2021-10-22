@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public enum WeaponState
 {
@@ -28,6 +29,21 @@ public class PlayerWeapon : MonoBehaviour
     bool triggerPressed = false;
     int currentBurstShots = 0;
 
+    [Header("--- CAMERA MOVEMENT ON AIM ---")]
+    public float aimCameraDist = 1;
+    Vector3 targetCameraFollowObjPos;
+    float cameraFollowObjSmoothSpeedX;
+    float cameraFollowObjSmoothSpeedY;
+    public float cameraFollowObjSmoothTime=0.4f;
+    public CinemachineVirtualCamera vCam;
+    public bool isAiming
+    {
+        get
+        {
+            return virtualJoystickRight.joystickInput.magnitude >= virtualJoystickRight.deadZone;
+        }
+    }
+
     [Header("--- READ ONLY ---")]
     public WeaponState weaponSt = WeaponState.None;
 
@@ -46,6 +62,11 @@ public class PlayerWeapon : MonoBehaviour
     {
         myPlayerMov = GetComponent<PlayerMovementCMF>();
         aimTargetParent = aimTarget.parent;
+        ResetAimPosition();
+    }
+
+    public void KonoStart()
+    {
     }
 
     public void KonoUpdate()
@@ -53,11 +74,13 @@ public class PlayerWeapon : MonoBehaviour
         ProcessJoystickInput();
         ProcessShooting();
         ProcessReloadGun();
+        UpdateCameraFollowObjOnAim();
     }
 
     void ProcessJoystickInput()
     {
-        if (virtualJoystickRight.joystickInput.magnitude >= virtualJoystickRight.deadZone)
+        //Aiming or shooting
+        if (isAiming)
         {
             UpdateAim();
 
@@ -74,10 +97,13 @@ public class PlayerWeapon : MonoBehaviour
         }
         else
         {
+            myPlayerMov.cameraFollow.localPosition = Vector3.zero;
             EndShooting();
+            ResetAimPosition();
         }
     }
 
+    #region --- SHOOTING ---
     void StartShooting()
     {
         if (currentGun.firingMode == FiringMode.Burst && triggerPressed) return;
@@ -132,7 +158,7 @@ public class PlayerWeapon : MonoBehaviour
     void Shoot()
     {
         triggerPressed = true;
-        int bulletsToShoot= Mathf.Clamp(currentGun.bulletsPerShot, 1, currentGun.currentBulletsInClip);
+        int bulletsToShoot = currentGun.bulletsPerShot;
         for (int i = 0; i < bulletsToShoot; i++)
         {
             //Spawn bullets
@@ -167,14 +193,17 @@ public class PlayerWeapon : MonoBehaviour
 
 
         if (currentGun.firingMode == FiringMode.Burst) currentBurstShots++;
-        currentGun.currentBulletsInClip -= bulletsToShoot;
+        currentGun.currentBulletsInClip -= 1;
         MasterManager.GameDataManager.SaveWeaponsState();
+
+        WeaponHUD.instance.UpdateAmmoText();
     }
+    #endregion
 
-
+    #region --- RELOADING ---
     void StartReloadGun()
     {
-        if (MasterManager.GameDataManager.GetReward(RewardType.Ammo) > 0 && currentGun.currentBulletsInClip<currentGun.maxClipSize && !reloadStarted)
+        if (MasterManager.GameDataManager.GetReward(currentGun.ammoType) > 0 && currentGun.currentBulletsInClip<currentGun.maxClipSize && !reloadStarted)
         {
             reloadStarted = true;
             reloadTime = 0;
@@ -183,6 +212,7 @@ public class PlayerWeapon : MonoBehaviour
 
             //Reload sound
 
+            WeaponHUD.instance.StartReloading();
         }
     }
 
@@ -206,15 +236,48 @@ public class PlayerWeapon : MonoBehaviour
             reloadStarted = false;
             currentGun.Reload();
             weaponSt = WeaponState.None;
+            WeaponHUD.instance.StopReloading();
         }
     }
+    #endregion
 
+    #region --- AIM POSITION ---
     void UpdateAim()
     {
         float inputAngle = Vector2.SignedAngle(Vector2.up, virtualJoystickRight.joystickInput);
         aimTargetParent.localRotation = Quaternion.Euler(0, 0, inputAngle);
         if (virtualJoystickRight.joystickInput.x >= 0) myPlayerMov.RotateCharacter(true);
         else myPlayerMov.RotateCharacter(false);
+        CameraManager.instance.SetToAimingCamera();
+    }
+
+    public void ResetAimPosition()
+    {
+        if (isAiming) return;
+
+        if(myPlayerMov.rotateObj.localRotation.eulerAngles.y == 180)
+        aimTargetParent.localRotation = Quaternion.Euler(0, 0, 90);
+        else aimTargetParent.localRotation = Quaternion.Euler(0, 0, -90);
+    }
+    #endregion
+
+    //CAMERA
+    void UpdateCameraFollowObjOnAim()
+    {
+        if (isAiming)
+        {
+            targetCameraFollowObjPos = virtualJoystickRight.joystickInput.normalized * aimCameraDist;
+        }
+        else
+        {
+            targetCameraFollowObjPos = Vector3.zero;
+        }
+        Vector3 currentCameraFollowObjPos = myPlayerMov.cameraFollow.localPosition;
+        //currentCameraFollowObjPos.x = Mathf.SmoothDamp(currentCameraFollowObjPos.x, targetCameraFollowObjPos.x, ref cameraFollowObjSmoothSpeedX, cameraFollowObjSmoothTime);
+        //currentCameraFollowObjPos.y = Mathf.SmoothDamp(currentCameraFollowObjPos.y, targetCameraFollowObjPos.y, ref cameraFollowObjSmoothSpeedY, cameraFollowObjSmoothTime);
+        currentCameraFollowObjPos.x = Mathf.Lerp(currentCameraFollowObjPos.x, targetCameraFollowObjPos.x, cameraFollowObjSmoothTime);
+        currentCameraFollowObjPos.y = Mathf.Lerp(currentCameraFollowObjPos.y, targetCameraFollowObjPos.y, cameraFollowObjSmoothTime);
+        myPlayerMov.cameraFollow.localPosition = currentCameraFollowObjPos;
     }
 
 }

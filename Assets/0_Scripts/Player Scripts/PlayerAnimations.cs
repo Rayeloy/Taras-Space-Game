@@ -77,6 +77,7 @@ public class PlayerAnimations : MonoBehaviour
     public void SetAnimation(AnimationReferenceAsset animation, bool loop, float timeScale)
     {
         skeletonAnim.state.SetAnimation(0, animation, loop).TimeScale = timeScale;
+        skeletonAnim.state.SetAnimation(1, animation, loop).TimeScale = timeScale;
     }
 
     public void SetAnimationState(PlayerAnimationState state)

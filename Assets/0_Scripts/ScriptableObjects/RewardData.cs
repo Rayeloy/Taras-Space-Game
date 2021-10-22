@@ -6,8 +6,10 @@ public enum RewardType
     RealMoney = -1,
     None = 0,
     Coins = 1,
-    Ammo = 2,
-    Fuel = 3,    
+    Fuel = 3,
+    GunAmmo,
+    ARAmmo,
+    ShotgunAmmo,
     Length
 }
 
