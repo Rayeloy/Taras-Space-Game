@@ -80,10 +80,6 @@ public class PlayerMovementCMF : MonoBehaviour
     float maxAttackingMoveSpeed = 10;
     [Tooltip("Maximum speed that you can travel at horizontally when hit by someone")]
     public float maxKnockbackSpeed = 300f;
-    public float maxAimingSpeed = 5f;
-    public float maxHookingSpeed = 3.5f;
-    public float maxGrapplingSpeed = 3.5f;
-    public float maxSpeedInWater = 5f;
     //public float maxVerticalSpeedInWater = 10f; 
     public float maxFloatingSpeed = 2f;
 
@@ -99,6 +95,7 @@ public class PlayerMovementCMF : MonoBehaviour
     public float gravityMultiplier=1;
     [HideInInspector]
     public float currentGravity;
+    public float gravityMultiplierOnFalling = 3f;
 
     [Header(" --- JUMP --- ")]
     public float jumpHeight = 4f;
@@ -161,8 +158,6 @@ public class PlayerMovementCMF : MonoBehaviour
 
     //JUMP
     public VerticalMovementState vertMovSt = VerticalMovementState.None;
-    [HideInInspector]
-    public bool wallJumpAnim = false;
 
     //FIXED JUMPS (Como el trampolín)
     bool fixedJumping;
@@ -505,7 +500,7 @@ public class PlayerMovementCMF : MonoBehaviour
                     vertMovSt = VerticalMovementState.None;
                 }
 
-                currentVel.y += currentGravity * Time.deltaTime;
+                currentVel.y += currentGravity * gravityMultiplierOnFalling * Time.deltaTime;
                 break;
             case VerticalMovementState.Jumping:
                 currentVel.y += currentGravity * Time.deltaTime;

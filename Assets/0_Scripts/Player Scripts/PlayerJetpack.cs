@@ -94,7 +94,7 @@ public class PlayerJetpack : MonoBehaviour
         }
         else//refilling
         {
-            if (currentFuel < totalFuel)
+            if (currentFuel < totalFuel && myPlayerMov.collCheck.below && !myPlayerMov.collCheck.sliping)
             {
                 if (jetpackConsumptionCurrentTime >= jetpackRefillFrequency)
                 {

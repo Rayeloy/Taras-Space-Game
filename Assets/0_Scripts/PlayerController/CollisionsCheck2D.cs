@@ -8,6 +8,7 @@ using System.Linq;
 public class CollisionsCheck2D : MonoBehaviour
 {
     public PlayerMovementCMF myPlayerMov;
+    public EnemyAI myEnemy;
     [HideInInspector]
     public Collider2D myCollider;
     Rigidbody2D rb;
@@ -74,38 +75,6 @@ public class CollisionsCheck2D : MonoBehaviour
     public float maxRoofAngle = 150;
 
 
-    //[Header(" -- Horizontal Collisions -- ")]
-    //public SphereCollider sphereCollTop;
-    //public SphereCollider sphereCollMiddle;
-    //public SphereCollider sphereCollBottom;
-
-    //public LayerMask wallMask;
-    //public float sphereRadius = 5;
-
-    //[HideInInspector]
-    //public Vector3 wallNormal;
-    //[HideInInspector]
-    //public GameObject wall;
-    //[HideInInspector]
-    //public float wallSlopeAngle, wallAngle;
-    //public float wallJumpWallMaxAngleWithMovement = 110f;
-
-    //[HideInInspector]
-    //public List<WallCollisionHit> horizontalCollHits;
-    //List<WallCollisionHit> horizontalCollHitsTop;
-    //List<WallCollisionHit> horizontalCollHitsMiddle;
-    //List<WallCollisionHit> horizontalCollHitsBottom;
-    //List<WallCollisionHit> wallJumpCollHits;
-
-    //public Collider[] hitColliders;
-    //public int maxHitColliders = 10;
-    //public int wallAverageRays = 5;
-    //public float wallAverageRadius = 0.1f;
-
-    //Collider Goodcol = new Collider();
-    //Collider oldcol = new Collider();
-
-
     public void KonoAwake(Collider2D _collider)
     {
         qTI = collideWithTriggers ? QueryTriggerInteraction.Collide : QueryTriggerInteraction.Ignore;
@@ -121,10 +90,8 @@ public class CollisionsCheck2D : MonoBehaviour
         safeBelowTime = 0;
         safeBelowMaxTime = 0;
 
-        //sphereCollTop.radius = sphereRadius;
-        //sphereCollMiddle.radius = sphereRadius;
-        //sphereCollBottom.radius = sphereRadius;
-        //hitColliders = new Collider[maxHitColliders];
+        myPlayerMov = GetComponent<PlayerMovementCMF>();
+        myEnemy = GetComponent<EnemyAI>();
     }
 
     public void KonoStart()
@@ -341,216 +308,6 @@ public class CollisionsCheck2D : MonoBehaviour
         }
     }
 
-    #endregion
-
-   #region --- HORIZONTAL COLLISIONS ---
-//    //public Collider DetectWallCollision()
-//    //{
-//    //    hitColliders = Physics.OverlapSphere(gameObject.transform.position + localStartPoint, sphereRadius, wallMask);
-//    //    if (hitColliders.Length > 0)
-//    //    {
-
-//    //        bool b = false;
-//    //        for (int i = 0; i < hitColliders.Length; i++)
-//    //        {
-//    //            if ((!b && plane.GetSide(hitColliders[i].transform.position)) || plane.GetSide(hitColliders[i].transform.position) &&
-//    //                (Vector3.Distance(gameObject.transform.position, hitColliders[i].transform.position) < Vector3.Distance(gameObject.transform.position, oldcol.transform.position)))
-//    //            {
-//    //                b = true;
-//    //                Goodcol = hitColliders[i];
-//    //                oldcol = hitColliders[i];
-//    //            }
-//    //            else
-//    //            {
-//    //                oldcol = hitColliders[i];
-//    //            }
-//    //        }
-//    //        Debug.Log(Goodcol != null);
-//    //        if (Goodcol != null)
-//    //        {
-//    //            hit = Physics.Raycast(gameObject.transform.position + localStartPoint, Goodcol.transform.position - gameObject.transform.position, out RaycastHit _hit, 5, wallMask, qTI);
-//    //            Debug.DrawRay(gameObject.transform.position + localStartPoint, Goodcol.transform.position - gameObject.transform.position);
-//    //            finalNormal = _hit.normal;
-//    //            if (Vector3.Distance(gameObject.transform.position + localStartPoint, Goodcol.transform.position) < 3 && hit)
-//    //            {
-//    //                return Goodcol;
-//    //            }
-//    //        }
-//    //    }
-//    //    return null;
-//    //}
-
-//    //Eloy's attemp:
-
-//    public void HorizontalCollisions()
-//    {
-//        Collider[] ourColliders = new Collider[] { myCollider, sphereCollTop, sphereCollMiddle, sphereCollBottom };
-//        horizontalCollHits = new List<WallCollisionHit>();
-//        GetCollisionsHits(SpherePosition.Top, sphereCollTop, ourColliders);
-//        GetCollisionsHits(SpherePosition.Middle, sphereCollMiddle, ourColliders);
-//        GetCollisionsHits(SpherePosition.Bottom, sphereCollBottom, ourColliders);
-//    }
-
-//    public void WallJumpCollisions(Vector3 vel)
-//    {
-//        Vector3 horVel = new Vector3(vel.x, 0, vel.z);
-//        if (horVel.magnitude < 0.001f) return;
-
-//        wallJumpCollHits = new List<WallCollisionHit>();
-//        for (int i = 0; i < horizontalCollHits.Count; i++)
-//        {
-//            Vector3 sphereCenter = horizontalCollHits[i].spherePos == SpherePosition.Top ? sphereCollTop.transform.position : horizontalCollHits[i].spherePos == SpherePosition.Bottom ?
-//sphereCollBottom.transform.position : sphereCollMiddle.transform.position;
-//            Vector3 collisionVector = horizontalCollHits[i].point - sphereCenter;
-//            collisionVector.y = 0;
-//            float angleWithMovementVector = Vector3.Angle(horVel, collisionVector);
-//            if (angleWithMovementVector <= wallJumpWallMaxAngleWithMovement)
-//            {
-//                wallJumpCollHits.Add(horizontalCollHits[i]);
-
-//                if (!disableAllRays) Debug.DrawLine(sphereCenter, horizontalCollHits[i].point, orange);
-//            }
-//        }
-
-//        //Find closest hit
-//        float minDist = float.MaxValue;
-//        WallCollisionHit wallCollHit = new WallCollisionHit(SpherePosition.None, new RaycastHit(), Vector3.zero, Vector3.zero);
-//        for (int i = 0; i < wallJumpCollHits.Count; i++)
-//        {
-//            Vector3 sphereCenter = wallJumpCollHits[i].spherePos == SpherePosition.Top ? sphereCollTop.transform.position : horizontalCollHits[i].spherePos == SpherePosition.Bottom ?
-//    sphereCollBottom.transform.position : sphereCollMiddle.transform.position;
-
-//            float dist = (sphereCenter - wallJumpCollHits[i].point).magnitude;
-//            if (dist < minDist)
-//            {
-//                minDist = dist;
-//                wallCollHit = wallJumpCollHits[i];
-//                //wallNormal =;
-//            }
-//        }
-
-//        //At least one walljumpable wall
-//        if (wallCollHit.collider != null)
-//        {
-//            //TO DO: throw some raycasts around collision point and calculate average normal to "smoothen" walls.
-//            List<Vector3> normals = new List<Vector3>();
-//            if (!disableAllRays) Debug.DrawRay(wallCollHit.point, wallCollHit.hit.normal * 1f, Color.gray);
-//            normals.Add(wallCollHit.hit.normal);
-
-//            float anglePartition = 360 / wallAverageRays;
-//            Vector3 rayDir = horVel.normalized;
-//            Vector3 rayDirPerp = Vector3.Cross(rayDir, Vector3.up).normalized;
-//            for (int i = 0; i < wallAverageRays; i++)
-//            {
-//                RaycastHit hit;
-//                float angle = anglePartition * i;
-//                Vector3 radiusDir = Quaternion.AngleAxis(angle, rayDir.normalized) * rayDirPerp;
-//                Vector3 rayOrigin = wallCollHit.rayOrigin + radiusDir.normalized * wallAverageRadius;
-//                if (Physics.Raycast(rayOrigin, rayDir, out hit, wallCollHit.rayLength, wallMask, QueryTriggerInteraction.Ignore))
-//                {
-//                    if (!normals.Contains(hit.normal))
-//                    {
-//                        if (!disableAllRays) Debug.DrawRay(rayOrigin, rayDir * wallCollHit.rayLength, Color.red);
-//                        if (!disableAllRays) Debug.DrawRay(hit.point, hit.normal * 1f, Color.gray);
-//                        normals.Add(hit.normal);
-//                    }
-//                    else
-//                    {
-//                        if (!disableAllRays) Debug.DrawRay(rayOrigin, rayDir * wallCollHit.rayLength, darkRed);
-//                    }
-//                }
-//            }
-
-//            Vector3 avgNormal = Vector3.zero;
-//            for (int i = 0; i < normals.Count; i++)
-//            {
-//                avgNormal += normals[i];
-//            }
-//            if (!disableAllRays) Debug.DrawRay(wallCollHit.point, avgNormal * 2, Color.white);
-
-//            wall = wallCollHit.collider.gameObject;
-//            wallSlopeAngle = wallCollHit.slopeAngle;
-//            wallNormal = avgNormal;
-//            wallAngle = SignedRelativeAngle(Vector3.forward, wallNormal, Vector3.up);
-//        }
-
-//    }
-
-//    void GetCollisionsHits(SpherePosition spherePos, SphereCollider mySphereCollider, Collider[] ourColliders)
-//    {
-//        hitColliders = new Collider[maxHitColliders];
-//        hitColliders = Physics.OverlapSphere(mySphereCollider.transform.position, sphereRadius, wallMask);
-
-//        List<WallCollisionHit> collisionHits = new List<WallCollisionHit>();
-//        for (int i = 0; i < hitColliders.Length; i++)
-//        {
-//            Collider auxColl = hitColliders[i];
-
-//            //Skip if collided with ourselves
-//            bool collidedWithOurself = false;
-//            for (int f = 0; f < ourColliders.Length && !collidedWithOurself; f++)
-//            {
-//                if (auxColl == ourColliders[f]) collidedWithOurself = true;
-//            }
-//            if (collidedWithOurself) continue;
-
-//            //Skip if we already processed that collider
-//            bool collFound = false;
-//            for (int j = 0; j < horizontalCollHits.Count && !collFound; j++)
-//            {
-//                if (auxColl == horizontalCollHits[j].collider && horizontalCollHits[j].spherePos == spherePos)
-//                {
-//                    collFound = true;
-//                }
-//            }
-//            if (collFound)
-//            {
-//                Debug.LogWarning("We are " + spherePos + "  and we are skipping the collider " + auxColl.name + " because it's already been processed");
-//                continue;
-//            }
-
-//            //New collider found
-//            Vector3 hitDir = Vector3.zero;
-//            float hitDist = 0;
-//            if (Physics.ComputePenetration(mySphereCollider, mySphereCollider.transform.position, mySphereCollider.transform.rotation, auxColl, auxColl.transform.position, auxColl.transform.rotation,
-//                    out hitDir, out hitDist))
-//            {
-//                float rayLength = 2;
-//                RaycastHit hit;
-//                if (Physics.Raycast(mySphereCollider.transform.position, -hitDir, out hit, rayLength, wallMask, QueryTriggerInteraction.Ignore))
-//                {
-//                    if (hit.collider == auxColl)
-//                    {
-//                        float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
-
-//                        //too steep for a slope, so it's a wall
-//                        if (slopeAngle > maxSlopeAngle)
-//                        {
-//                            WallCollisionHit collHit = new WallCollisionHit(spherePos, hit, mySphereCollider.transform.position, -hitDir, rayLength, slopeAngle);
-//                            if (!disableAllRays) Debug.DrawLine(mySphereCollider.transform.position, hit.point, darkBrown);
-//                            horizontalCollHits.Add(collHit);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-
-//    }
-
-//    //void Update()
-//    //{
-//    //    colliderFinal = DetectWallCollision();
-//    //}
-
-//    public void CheckIfJump()
-//    {
-
-//    }
-//    //void Update()
-//    //{
-//    //    a = new Plane(rig.velocity, origin.position);
-//    //    colliderFinal = DetectWallCollision();
-//    //}
     #endregion
 
     #endregion
@@ -771,11 +528,23 @@ public class CollisionsCheck2D : MonoBehaviour
                     return false;
                 }
             }
-            else
+            else if (hit.collider.tag == "Enemy")
             {
-                //Debug.LogWarning("COLLIDED WITH TRIGGER");
-                return true;
+
+                EnemyAI otherEnemy = hit.collider.GetComponentInParent<EnemyAI>();
+                //Debug.LogWarning("otherPlayer = "+ otherPlayer);
+                if (otherEnemy != null && otherEnemy != myEnemy)
+                {
+                    //Debug.LogWarning("COLLIDED WITH TRIGGER BUT IS ANOTHER PLAYER! otherPlayer = "+ otherPlayer + "; hit.transform = " + hit.collider);
+                    return true;
+                }
+                else
+                {
+                    //Debug.LogWarning("COLLIDED WITH TRIGGER (MYSELF)");
+                    return false;
+                }
             }
+            else return true;
 
         }
     }

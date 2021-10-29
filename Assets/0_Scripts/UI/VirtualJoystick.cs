@@ -27,6 +27,7 @@ public class VirtualJoystick : MonoBehaviour
     public event SinglePress OnSinglePress;
     public float maxSinglePressTime = 0.3f;
     float pressedTime = 0;
+    public float singlePressMaxMagnitude = 0.6f;
 
     public bool mobile= true;
 
@@ -107,7 +108,10 @@ public class VirtualJoystick : MonoBehaviour
     {
         if (joystickPressed)
         {
-            if (pressedTime <= maxSinglePressTime && OnSinglePress != null) OnSinglePress();
+            if (pressedTime <= maxSinglePressTime && OnSinglePress != null && joystickInput.magnitude < singlePressMaxMagnitude)
+            {
+                OnSinglePress();
+            }
             joystickPressed = false;
             //Debug.Log("Joystick Released");
             joystickInput = Vector3.zero;

@@ -318,6 +318,10 @@ public class Sensor2D {
             RaycastHit2D _hit = Physics2D.Raycast(currentRayStartPosition, rayDirection, castLength, layermask);
             if (_hit.collider != null)
             {
+                if (_hit.collider.GetComponent<EnemyAI>() != null)
+                {
+                    Debug.Log("Enemy Raycast hit " + _hit.collider.gameObject.name);
+                }
                 if (isInDebugMode)
                 {
                     Debug.DrawRay(currentRayStartPosition, Vector2.left * 0.1f, Color.yellow);
