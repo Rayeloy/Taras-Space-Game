@@ -19,9 +19,9 @@ public class PlayerAnimations : MonoBehaviour
 
     [Header("--- Spine Animations ---")]
     public SkeletonAnimation skeletonAnim;
-    public AnimationReferenceAsset playerAnimIdle, playerAnimWalking, playerAnimJumping, playerAnimLanding;
+    public AnimationReferenceAsset playerAnimIdle, playerAnimWalking, playerAnimJumping, playerAnimLanding, playerAnimWalkingBackwards, playerAnimFalling;
     public PlayerAnimationState animationSt = PlayerAnimationState.None;
-    public float idleTimeScale = 1, walkingTimeScale = 1, jumpingTimeScale = 1, LandingTimeScale = 1;
+    public float idleTimeScale = 1, walkingTimeScale = 1, walkingBackTimeScale = 1, jumpingTimeScale = 1, landingTimeScale = 1, fallingTimeScale = 1;
     public float timeToFloorToStartLandingAnim = 3;
 
     public void KonoAwake()
@@ -64,20 +64,15 @@ public class PlayerAnimations : MonoBehaviour
                 float timeToLand = myPlayerMov.collCheck.distanceToFloor / -myPlayerMov.currentVel.y;
             if (timeToLand <= timeToFloorToStartLandingAnim) SetAnimationState(PlayerAnimationState.Landing);
                 else SetAnimationState(PlayerAnimationState.Falling);
-
-            }
-            else
-            {
-                SetAnimationState(PlayerAnimationState.Falling);
-
             }
         }
     }
 
     public void SetAnimation(AnimationReferenceAsset animation, bool loop, float timeScale)
     {
+        Debug.LogWarning("ANIMATION CHANGED TO " + animation.Animation);
         skeletonAnim.state.SetAnimation(0, animation, loop).TimeScale = timeScale;
-        skeletonAnim.state.SetAnimation(1, animation, loop).TimeScale = timeScale;
+        //skeletonAnim.state.SetAnimation(1, animation, loop).TimeScale = timeScale;
     }
 
     public void SetAnimationState(PlayerAnimationState state)
@@ -92,20 +87,30 @@ public class PlayerAnimations : MonoBehaviour
             case PlayerAnimationState.Walking:
                 float movementSpeedPercent = myPlayerMov.currentSpeed/myPlayerMov.maxMoveSpeed;
                 float walkingAnimTimeScale = walkingTimeScale * movementSpeedPercent;
-                Debug.Log("WALKING ANIMATION: currentSpeed = " + myPlayerMov.currentSpeed + "; maxMoveSpeed = " + myPlayerMov.maxMoveSpeed + "; movementSpeedPercent = " + movementSpeedPercent+
-                    "; walkingAnimTimeScale = " + walkingAnimTimeScale);
-                SetAnimation(playerAnimWalking, true, walkingAnimTimeScale);
+                //Debug.Log("WALKING ANIMATION: currentSpeed = " + myPlayerMov.currentSpeed + "; maxMoveSpeed = " + myPlayerMov.maxMoveSpeed + "; movementSpeedPercent = " + movementSpeedPercent+
+                //    "; walkingAnimTimeScale = " + walkingAnimTimeScale);
+                Debug.Log(";player vel.x = " + myPlayerMov.currentVel.x + "; char rotation = " + myPlayerMov.rotateObj.localRotation.eulerAngles.y);
+                if ((myPlayerMov.currentVel.x<0 && myPlayerMov.rotateObj.localRotation.eulerAngles.y==0) || (myPlayerMov.currentVel.x >0 && myPlayerMov.rotateObj.localRotation.eulerAngles.y == 180))
+                {
+                    walkingAnimTimeScale = walkingBackTimeScale * movementSpeedPercent;
+                    SetAnimation(playerAnimWalkingBackwards, true, walkingAnimTimeScale);
+                }
+                else
+                {
+                    SetAnimation(playerAnimWalking, true, walkingAnimTimeScale);
+                }
                 break;
             case PlayerAnimationState.Jumping:
                 SetAnimation(playerAnimJumping, false, jumpingTimeScale);
                 break;
             case PlayerAnimationState.Landing:
-                SetAnimation(playerAnimLanding, false, LandingTimeScale);
+                SetAnimation(playerAnimLanding, false, landingTimeScale);
                 break;
             case PlayerAnimationState.Falling:
                 SetAnimation(playerAnimJumping, false, 0);
                 Spine.TrackEntry currentAnimation = skeletonAnim.state.GetCurrent(0);
                 currentAnimation.TrackTime = skeletonAnim.Skeleton.Data.FindAnimation("walk").Duration;
+                //SetAnimation(playerAnimFalling, false, fallingTimeScale); 
                 break;
         }
     }
@@ -115,8 +120,33 @@ public class PlayerAnimations : MonoBehaviour
         switch (animationSt)
         {
             case PlayerAnimationState.Walking:
-                float movementSpeedPercent = myPlayerMov.currentSpeed / myPlayerMov.maxMoveSpeed;
-                float walkingAnimTimeScale = walkingTimeScale * movementSpeedPercent;
+                float movementSpeedPercent = myPlayerMov.currentSpeed / myPlayerMov.currentMaxMoveSpeed;
+                float walkingAnimTimeScale = 0;
+                Debug.Log("myPlayerMov.currentSpeed = " + myPlayerMov.currentSpeed + "; myPlayerMov.currentMaxMoveSpeed = " + myPlayerMov.currentMaxMoveSpeed);
+                if (skeletonAnim.state.GetCurrent(0).Animation == playerAnimWalking.Animation)
+                {
+                    if ((myPlayerMov.currentVel.x < 0 && myPlayerMov.rotateObj.localRotation.eulerAngles.y == 0) || (myPlayerMov.currentVel.x > 0 && myPlayerMov.rotateObj.localRotation.eulerAngles.y == 180))
+                    {
+                        walkingAnimTimeScale = walkingBackTimeScale * movementSpeedPercent;
+                        SetAnimation(playerAnimWalkingBackwards, true, walkingAnimTimeScale);
+                    }
+                    else
+                    {
+                        walkingAnimTimeScale = walkingTimeScale * movementSpeedPercent;
+                    }
+                }
+                else
+                {
+                    if ((myPlayerMov.currentVel.x < 0 && myPlayerMov.rotateObj.localRotation.eulerAngles.y == 180) || (myPlayerMov.currentVel.x > 0 && myPlayerMov.rotateObj.localRotation.eulerAngles.y == 0))
+                    {
+                        walkingAnimTimeScale = walkingTimeScale * movementSpeedPercent;
+                        SetAnimation(playerAnimWalking, true, walkingAnimTimeScale);
+                    }
+                    else
+                    {
+                        walkingAnimTimeScale = walkingBackTimeScale * movementSpeedPercent;
+                    }
+                }
                 skeletonAnim.state.GetCurrent(0).TimeScale = walkingAnimTimeScale;
                 break;
         }

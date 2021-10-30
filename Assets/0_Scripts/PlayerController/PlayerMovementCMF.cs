@@ -77,6 +77,7 @@ public class PlayerMovementCMF : MonoBehaviour
     public float maxFallSpeed = 40;
     public float maxAscendSpeed = 40;
     public float maxMoveSpeed = 10;
+    public float maxMoveSpeedBackwards = 4;
     float maxAttackingMoveSpeed = 10;
     [Tooltip("Maximum speed that you can travel at horizontally when hit by someone")]
     public float maxKnockbackSpeed = 300f;
@@ -315,7 +316,7 @@ public class PlayerMovementCMF : MonoBehaviour
                 moveSt = MoveState.Moving;
                 currentInputDir = temp;
                 currentInputDir.Normalize();
-                if(myPlayerWeapon.weaponSt != WeaponState.Aiming || myPlayerWeapon.weaponSt != WeaponState.Shooting)RotateCharacter(temp.x >= 0);
+                if(!myPlayerWeapon.isAiming) RotateCharacter(temp.x >= 0);
             }
             else
             {
@@ -341,7 +342,8 @@ public class PlayerMovementCMF : MonoBehaviour
             //ProcessHardSteer();
 
             #region ------------------------------ Max Move Speed ------------------------------
-            currentMaxMoveSpeed = maxMoveSpeed;//maxAttackingMoveSpeed == maxMoveSpeed if not attacking
+            currentMaxMoveSpeed = (currentVel.x < 0 && rotateObj.localRotation.eulerAngles.y == 0) || (currentVel.x > 0 && rotateObj.localRotation.eulerAngles.y == 180)?maxMoveSpeedBackwards:
+                maxMoveSpeed;//maxAttackingMoveSpeed == maxMoveSpeed if not attacking
 
             if (currentSpeed > (currentMaxMoveSpeed + 0.1f) && (moveSt == MoveState.Moving || moveSt == MoveState.NotMoving))
             {
@@ -741,13 +743,15 @@ public class PlayerMovementCMF : MonoBehaviour
     #region --- CHARACTER ROTATION ---
     public void RotateCharacter(bool right)
     {
+        if ((right && rotateObj.localRotation.eulerAngles.y == 0)||(!right && rotateObj.localRotation.eulerAngles.y==180)) return;
+        Debug.Log("Rotation char to " + (right ? "right" : "left"));
         if (right)
         {
             rotateObj.localRotation = Quaternion.Euler(0, 0, 0);
         }
         else
         {
-            rotateObj.localRotation = Quaternion.Euler(0, -180, 0);
+            rotateObj.localRotation = Quaternion.Euler(0, 180, 0);
         }
         myPlayerWeapon.ResetAimPosition();
     }

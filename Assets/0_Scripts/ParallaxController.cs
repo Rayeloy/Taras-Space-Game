@@ -14,6 +14,8 @@ public class ParallaxController : MonoBehaviour
     public List<ParallaxItem> middlegroundList;
     public List<ParallaxItem> foregroundList;
 
+    float cameraWorldWidth;
+
     private void Awake()
     {
         backgroundList = new List<ParallaxItem>();
@@ -25,6 +27,12 @@ public class ParallaxController : MonoBehaviour
         FillParallaxList(middlegroundMinus1List, middlegroundMinus1Parent);
         FillParallaxList(middlegroundList, middlegroundParent);
         FillParallaxList(foregroundList, foregroundParent);
+
+        float aspect = (float)Screen.width / Screen.height;
+
+        float worldHeight = Camera.main.orthographicSize * 2;
+
+        cameraWorldWidth = worldHeight * aspect;
     }
 
     private void Update()
@@ -47,20 +55,26 @@ public class ParallaxController : MonoBehaviour
     {
         for (int i = 0; i < list.Count; i++)
         {
-            float distToCamera = list[i].originalPosition.x - Camera.main.transform.position.x;
+            Vector3 cameraCenter = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, Camera.main.nearClipPlane));
+            float distToCamera = list[i].originalPosition.x - cameraCenter.x;
             float parallaxOffsetX = (distToCamera * layerSpeed * parallaxSensitivity);
             Vector3 newPos = list[i].originalPosition + Vector3.right * parallaxOffsetX;
             ParallaxRestrainer restrainer = list[i].transform.GetComponent<ParallaxRestrainer>();
+            Debug.Log("Object: "+list[i].transform.name+"; CameraCenter = " + cameraCenter + "; distToCamera = "+ distToCamera + "; parallaxOffsetX = "+ parallaxOffsetX + "; newPos = "+ newPos);
             if (restrainer != null)
             {
                 if (restrainer.restrainXToLeft && newPos.x < list[i].originalPosition.x) newPos.x = list[i].originalPosition.x;
                 if(restrainer.restrainXToRight && newPos.x > list[i].originalPosition.x) newPos.x = list[i].originalPosition.x;
+                float cameraOffset =-(cameraWorldWidth / 2 * restrainer.cameraOffsetX);
+                newPos.x += cameraOffset;
+                Debug.Log("Restrainer found! = "+ cameraOffset + "; newPos.x = "+ newPos.x + ";restrainer.restrainXToLeft  = "+ restrainer.restrainXToLeft + "; restrainer.restrainXToRight = " + restrainer.restrainXToRight);
             }
             list[i].transform.position = newPos;
         }
     }
 }
 
+[System.Serializable]
 public class ParallaxItem
 {
     public Transform transform;
