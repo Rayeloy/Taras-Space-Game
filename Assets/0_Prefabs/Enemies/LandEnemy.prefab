@@ -123,7 +123,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4a2496ceb5edc64b9d376f0a2c55d5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collidingWithWall: 0
 --- !u!50 &38797912
 Rigidbody2D:
   serializedVersion: 4
@@ -355,6 +354,7 @@ GameObject:
   - component: {fileID: 9180151787413495284}
   - component: {fileID: 9180151787413495285}
   - component: {fileID: 9180151787413495286}
+  - component: {fileID: 7078304694861100005}
   m_Layer: 10
   m_Name: LandEnemy
   m_TagString: Enemy
@@ -440,6 +440,8 @@ MonoBehaviour:
   currentTimePatrolling: 0
   currentMaxTimePatrolling: 0.7
   movingToRight: 1
+  maxTimeStaggered: 0.5
+  currentTimeStaggered: 0
 --- !u!114 &9180151787413495284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -573,6 +575,19 @@ MonoBehaviour:
   floor: {fileID: 0}
   roofCheckRayNumber: 3
   maxRoofAngle: 140
+--- !u!114 &7078304694861100005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9180151787413495280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42f80dc83548db741a09ef5c56ce53df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 0
 --- !u!1 &9180151787563338058
 GameObject:
   m_ObjectHideFlags: 0

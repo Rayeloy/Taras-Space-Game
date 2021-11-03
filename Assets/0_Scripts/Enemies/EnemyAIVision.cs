@@ -12,6 +12,14 @@ public class EnemyAIVision : MonoBehaviour
         myEnemyAI = GetComponentInParent<EnemyAI>();
     }
 
+    private void Update()
+    {
+        if(player != null)
+        {
+            myEnemyAI.StartPursuing(player);
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         //Debug.Log("enemy vision collided with " + other.name);

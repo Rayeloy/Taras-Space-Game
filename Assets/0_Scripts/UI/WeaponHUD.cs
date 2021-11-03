@@ -11,6 +11,7 @@ public class WeaponHUD : MonoBehaviour
 
     public TextMeshProUGUI ammoText, totalAmmoText;
     public Image gunLogo;
+    public Image noWeaponImage;
 
     public UIAnimation reloadingAlphaAnim;
 
@@ -35,6 +36,8 @@ public class WeaponHUD : MonoBehaviour
 
     public void Setup()
     {
+        gunLogo.gameObject.SetActive(true);
+        noWeaponImage.gameObject.SetActive(false);
         gunLogo.sprite = myPlayerCMF.myPlayerWeapon.currentGun.gunLogo;
         UpdateAmmoText();
     }
@@ -59,5 +62,18 @@ public class WeaponHUD : MonoBehaviour
         UIAnimationsManager.instance.StopUIAnimation(reloadingAlphaAnim);
         ammoText.color = new Color(ammoText.color.r, ammoText.color.g, ammoText.color.b, reloadingAlphaAnim.alphaMin);
         UpdateAmmoText();
+    }
+
+    public void SetupNoWeapon()
+    {
+        ammoText.text = "";
+        totalAmmoText.text = "";
+        gunLogo.gameObject.SetActive(false);
+        noWeaponImage.gameObject.SetActive(true);
+    }
+
+    public void SwitchWeapon(bool right)
+    {
+        myPlayerCMF.myPlayerWeapon.SwitchWeapon(right);
     }
 }

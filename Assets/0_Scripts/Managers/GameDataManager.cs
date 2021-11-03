@@ -138,6 +138,7 @@ public class GameDataManager : ScriptableObject
     [Header("--- WEAPONS ---")]
     public GunData[] allGuns;
     public float bulletMaxLifeTime = 6;
+    public Sprite noWeaponLogo;
 
 
     #region --- SAVING SYSTEM---

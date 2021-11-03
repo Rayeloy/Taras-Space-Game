@@ -20,6 +20,7 @@ public class PlayerWeapon : MonoBehaviour
     Transform aimTargetParent;
 
     public GunData currentGun;
+    public int currentGunIndex = 0;
 
     bool startedShooting = false;
     float shootingTime = 0;
@@ -44,6 +45,7 @@ public class PlayerWeapon : MonoBehaviour
         }
     }
 
+
     [Header("--- READ ONLY ---")]
     public WeaponState weaponSt = WeaponState.None;
 
@@ -67,6 +69,9 @@ public class PlayerWeapon : MonoBehaviour
 
     public void KonoStart()
     {
+        currentGunIndex = -1;
+        SwitchWeapon(true);
+        ReloadInstanly();
     }
 
     public void KonoUpdate()
@@ -75,6 +80,18 @@ public class PlayerWeapon : MonoBehaviour
         ProcessShooting();
         ProcessReloadGun();
         UpdateCameraFollowObjOnAim();
+        if (currentGunIndex >= 0)
+        {
+            myPlayerMov.myPlayerAnimations.ActivateAttatchment("weapon", "image0");
+        }
+        if (isAiming)
+        {
+            myPlayerMov.myPlayerAnimations.SetAimingPose();
+        }
+        else
+        {
+            myPlayerMov.myPlayerAnimations.SetNotAimingPose();
+        }
     }
 
     void ProcessJoystickInput()
@@ -239,6 +256,15 @@ public class PlayerWeapon : MonoBehaviour
             WeaponHUD.instance.StopReloading();
         }
     }
+
+    void ReloadInstanly()
+    {
+        if(currentGun.currentBulletsInClip< currentGun.maxClipSize && MasterManager.GameDataManager.GetReward(currentGun.ammoType) > 0)
+        {
+            currentGun.Reload();
+            WeaponHUD.instance.StopReloading();
+        }
+    }
     #endregion
 
     #region --- AIM POSITION ---
@@ -260,6 +286,51 @@ public class PlayerWeapon : MonoBehaviour
         else aimTargetParent.localRotation = Quaternion.Euler(0, 0, -90);
     }
     #endregion
+
+    public void SwitchWeapon(bool right)
+    {
+        if (right)
+        {
+            if (currentGunIndex == (MasterManager.GameDataManager.allGuns.Length - 1))
+            {
+                currentGunIndex = -1;
+                currentGun = null;
+            }
+            else
+            {
+                currentGunIndex++;
+                currentGun = MasterManager.GameDataManager.allGuns[currentGunIndex];
+            }
+        }
+        else
+        {
+            if (currentGunIndex == 0)
+            {
+                currentGunIndex = -1;
+                currentGun = null;
+            }
+            else
+            {
+                if (currentGunIndex == -1) currentGunIndex = (MasterManager.GameDataManager.allGuns.Length - 1);
+                else currentGunIndex--;
+                currentGun = MasterManager.GameDataManager.allGuns[currentGunIndex];
+            }
+        }
+
+        //Update Interface
+        if (currentGunIndex == -1)
+        {
+            myPlayerMov.myPlayerAnimations.SetNoWeaponPose();
+            WeaponHUD.instance.SetupNoWeapon();
+            myPlayerMov.myPlayerAnimations.ActivateAttatchment("weapon", null);
+        }
+        else
+        {
+            WeaponHUD.instance.Setup();
+            myPlayerMov.myPlayerAnimations.SetNotAimingPose();
+            myPlayerMov.myPlayerAnimations.ActivateAttatchment("weapon", "image0");
+        }
+    }
 
     //CAMERA
     void UpdateCameraFollowObjOnAim()

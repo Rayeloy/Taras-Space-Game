@@ -18,6 +18,10 @@ public class EnemyAIHealth : MonoBehaviour
         if (myEnemyAI.state == EnemyAIState.Dying || currentHealth<=0) return;
         currentHealth -= damageAmount;
         if (currentHealth <= 0) StartDeath();
+        else
+        {
+            myEnemyAI.StartStaggered();
+        }
     }
 
     public void StartDeath()

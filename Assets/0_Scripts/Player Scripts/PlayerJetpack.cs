@@ -54,7 +54,7 @@ public class PlayerJetpack : MonoBehaviour
     {
         currentFuel += consumption;
         currentFuel = Mathf.Clamp(currentFuel, 0, totalFuel);
-        Debug.Log("Adding fuel: " + consumption + "; currentFuel = " + currentFuel);
+        //Debug.Log("Adding fuel: " + consumption + "; currentFuel = " + currentFuel);
         return currentFuel > 0;
     }
 
@@ -67,7 +67,7 @@ public class PlayerJetpack : MonoBehaviour
             myPlayerMov.StopJump();
             myPlayerMov.vertMovSt = VerticalMovementState.Jetpack;
             jetpackConsumptionCurrentTime = 0;
-            Debug.Log("START JETPACK");
+            //Debug.Log("START JETPACK");
             jetpackParticles.Play(true);
             jetpackLight.SetActive(true);
 
@@ -110,7 +110,7 @@ public class PlayerJetpack : MonoBehaviour
     {
         if (jetpackStarted)
         {
-            Debug.Log("END JETPACK");
+            //Debug.Log("END JETPACK");
             jetpackStarted = false;
             myPlayerMov.vertMovSt = VerticalMovementState.None;//Is this correct?
             jetpackConsumptionCurrentTime = 0;

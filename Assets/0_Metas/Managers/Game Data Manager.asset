@@ -13,128 +13,101 @@ MonoBehaviour:
   m_Name: Game Data Manager
   m_EditorClassIdentifier: 
   currentStage: 1
-  sceneToLoadAfterCinematicVideo: Loading
-  openOptionsOnStart: -1
-  characterSelectedInMenu: 0
-  cutsceneReplayOn: 0
-  stopChangingTheGameStateFFS: 0
-  playCutscene2: 1
-  atributosNivel: {fileID: 11400000, guid: 48626a88d9a50da41b3123162664a7c3, type: 2}
   allRewardTypes:
-  - {fileID: 11400000, guid: a0e80763cb599b446a7d836057019d7f, type: 2}
-  - {fileID: 11400000, guid: fbd76c6fe405a354d9f7dbacc046d3ec, type: 2}
-  - {fileID: 11400000, guid: 82d8f548029058545846ddec16ad17dc, type: 2}
-  - {fileID: 11400000, guid: 0a567aaeed516994fae8208dd5824b47, type: 2}
-  - {fileID: 11400000, guid: c45dfdec49393bc40b7cfd24c1b2477d, type: 2}
-  - {fileID: 11400000, guid: 695ff8a8502029a4f9525724e4cc5826, type: 2}
-  - {fileID: 11400000, guid: b66c98fba9919854c85c0c32eefeb94a, type: 2}
-  - {fileID: 11400000, guid: 4110676158b5fa14da2cf50406b488e8, type: 2}
-  - {fileID: 11400000, guid: 178be584352c0494fb2a4080ac3d81d6, type: 2}
-  - {fileID: 11400000, guid: ec980e784ff60ab4db236c18dfa58d6e, type: 2}
-  - {fileID: 11400000, guid: 46926244ba01ac64caf39a5fd5d0374f, type: 2}
-  - {fileID: 11400000, guid: 9819de16f5edad944a68dc7309c968f5, type: 2}
-  - {fileID: 11400000, guid: 3e74ada9d3d6cae4192777ae4d9f4a33, type: 2}
-  - {fileID: 11400000, guid: 7aa1b3a7a44ac1f42be002a82b30e84e, type: 2}
-  - {fileID: 11400000, guid: dd74f5c5ef8700745b344668bd7f9fa3, type: 2}
-  - {fileID: 11400000, guid: 0c4f5e4a4461bbd4fa49430c607de45f, type: 2}
-  - {fileID: 11400000, guid: 4a9139c2a6c18d74a88b5269abe658e0, type: 2}
-  - {fileID: 11400000, guid: 80e865c1a8a0cf84588564a49958ef61, type: 2}
-  - {fileID: 11400000, guid: 8c5574916c0949342bc36f7277206b61, type: 2}
-  - {fileID: 11400000, guid: 71f61a15cdb0d4945b120d851ff35e72, type: 2}
-  - {fileID: 11400000, guid: 2b1e1dbd2cf0605459824eec3e1b4f49, type: 2}
-  - {fileID: 11400000, guid: de64038232927384394203d1ded146ba, type: 2}
-  - {fileID: 11400000, guid: 225b411ec8388934aabad5e88741b066, type: 2}
-  - {fileID: 11400000, guid: effb62efa54660444924fc3b3043e675, type: 2}
-  - {fileID: 11400000, guid: 91c921fa5b764754b960330e73f96737, type: 2}
-  - {fileID: 11400000, guid: 71d04b2c9f4396142b235994afb2bd15, type: 2}
-  - {fileID: 11400000, guid: 01cc26c832ecde6438b59f0749785fcd, type: 2}
-  - {fileID: 11400000, guid: d31c638dd824b2e499598f411ed60f33, type: 2}
-  - {fileID: 11400000, guid: 860e7693ca9bc3d429f9523d8772f64f, type: 2}
-  - {fileID: 11400000, guid: 2810f360ee09c3043bc455ae7511ce44, type: 2}
-  - {fileID: 11400000, guid: ba5f7e31198ff344da80c81c50508cbc, type: 2}
-  - {fileID: 11400000, guid: 575efcc23e2cbd646a4818f279f16cc6, type: 2}
-  - {fileID: 11400000, guid: 6ac782e9f6658e04384d172d785f025b, type: 2}
-  - {fileID: 11400000, guid: f17c05499e41a56419aa752ac20c0285, type: 2}
-  - {fileID: 11400000, guid: 481e554f9f904b44196c9c061a69e5a6, type: 2}
-  - {fileID: 11400000, guid: 3ca8bb101a1d4f246b1d645c401af809, type: 2}
-  - {fileID: 11400000, guid: bfb609dc9507db646a2421beb2895ca5, type: 2}
-  - {fileID: 11400000, guid: 23e2a56f606ddf5419a6aaa8998dca23, type: 2}
-  monedasTier1: 050000000f0000000f000000
-  monedasTier2: 14000000190000001e000000
-  monedasTier3: 32000000370000003c000000
-  allCharacters:
-  - {fileID: 11400000, guid: d38ae55878098414a861cd3900537661, type: 2}
-  - {fileID: 11400000, guid: e70c51a5f9bb3684c812c58e7f052f71, type: 2}
-  - {fileID: 11400000, guid: 5cb6f3854763bc646a7f0da76b25b11a, type: 2}
-  - {fileID: 11400000, guid: 3f2ca2d1837b3cf4d9507c4e2424ce00, type: 2}
-  - {fileID: 11400000, guid: 74d368efa17891a46bcf48619a709a02, type: 2}
-  - {fileID: 11400000, guid: 1f24de3362be7f14cbf5f22bf4d578c6, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   allShopIcons:
-  - {fileID: 11400000, guid: 0a73ff7a69d0948d8a472ea9c7ef896d, type: 2}
-  - {fileID: 11400000, guid: f4d4ec675adaf4fefbe5245832a02b34, type: 2}
-  - {fileID: 11400000, guid: 09f92c285e4f744089ac89acd350bce0, type: 2}
-  - {fileID: 11400000, guid: e8ef90203403332418d455c3ed68a345, type: 2}
-  - {fileID: 11400000, guid: d7a4f4f97c82b8243bb3d721c41f9769, type: 2}
-  - {fileID: 11400000, guid: c5275c3cbd645ec44877900448611918, type: 2}
-  - {fileID: 11400000, guid: 006308c8641bfbb4bbd1e79633573af3, type: 2}
-  - {fileID: 11400000, guid: f8784ce769a55491699d255b484fbe96, type: 2}
-  - {fileID: 11400000, guid: 32a7193d6b16d40bdba3fe3f7a98701a, type: 2}
-  - {fileID: 11400000, guid: 7713a8e835ad25541adf883cc59e9492, type: 2}
-  - {fileID: 11400000, guid: 99d17c26f91c76a42830e5d4188cbefa, type: 2}
-  - {fileID: 11400000, guid: 3951baedcdc544543a71979fe6ba870f, type: 2}
-  - {fileID: 11400000, guid: fd33a17c3f149406ead9874b08a8d81f, type: 2}
-  - {fileID: 11400000, guid: 3d1578c1ce20d458eac8fc78bb71413e, type: 2}
-  - {fileID: 11400000, guid: 51e30c1723d284a02b3ec557e2817547, type: 2}
-  - {fileID: 11400000, guid: ef58f989b66a79a49b6b3366ccc9889b, type: 2}
-  - {fileID: 11400000, guid: da63b3f327ffd7d4e983b91bee94c446, type: 2}
-  - {fileID: 11400000, guid: 0c12480a3f47ad248afd55347aabe319, type: 2}
-  - {fileID: 11400000, guid: dc0710519b9ec8c43ad345888deef81d, type: 2}
-  - {fileID: 11400000, guid: 111208e9abb8b454d8fed8d4d595e9d5, type: 2}
-  - {fileID: 11400000, guid: 50490fb7abfa8492d8666884301ebaac, type: 2}
-  - {fileID: 11400000, guid: 8c5927b69cc3c41c3bc9fd6c77c1e498, type: 2}
-  - {fileID: 11400000, guid: 5033ac56bf9fb4d56837584968847195, type: 2}
-  - {fileID: 11400000, guid: b15335cfb1cb842b4918d47687778acc, type: 2}
-  - {fileID: 11400000, guid: 1b6f1c8ff97944d288e85cb1fa68c406, type: 2}
-  - {fileID: 11400000, guid: 092eec318a2d44a82ac89b45da786d6d, type: 2}
-  - {fileID: 11400000, guid: 9c704ce2f65b3482ebd73a48ecc1c3e4, type: 2}
-  - {fileID: 11400000, guid: db803b1ac0df5c44dafdc611f9159731, type: 2}
-  - {fileID: 11400000, guid: c805f2a4156580043a09410b7189e2a9, type: 2}
-  - {fileID: 11400000, guid: 9bf62a7bab080a24fae6a2ad10340c59, type: 2}
-  - {fileID: 11400000, guid: 3d68c94d463e7414a9ec71bfc4903472, type: 2}
-  - {fileID: 11400000, guid: 8bc5c05be1c867a45b94ae7e711c1110, type: 2}
-  - {fileID: 11400000, guid: a635c477e7dad41cead114c1f53d5906, type: 2}
-  - {fileID: 11400000, guid: cae3efe56f6b84f2cbd719ef91da4f6b, type: 2}
-  - {fileID: 11400000, guid: 4908dde8d436242b0a967dfbaf86bacc, type: 2}
-  - {fileID: 11400000, guid: c8d51eeb5c2444e9ab134520e53e773b, type: 2}
-  - {fileID: 11400000, guid: 497f5e168319bb44da9d0a5883dfd38d, type: 2}
-  - {fileID: 11400000, guid: 3c6decf93f64447bfa590da41617a75f, type: 2}
-  - {fileID: 11400000, guid: 50ee6e453dc1441e68e678a10a873eb0, type: 2}
-  - {fileID: 11400000, guid: 6376666550bb64d00b1553dae017fb25, type: 2}
-  - {fileID: 11400000, guid: c335ea33cf05d41efb2a82b695911a38, type: 2}
-  - {fileID: 11400000, guid: f5d2d0043842848c7bc94160871dec3e, type: 2}
-  - {fileID: 11400000, guid: 7100dad0dfcd0487ab4af0fd7f88375a, type: 2}
-  - {fileID: 11400000, guid: 7cf2afdc6a8b24e2daf72282b462a898, type: 2}
-  - {fileID: 11400000, guid: 1809e724611f141fd939973174a8e90d, type: 2}
-  - {fileID: 11400000, guid: 63a05fa6ad95549329cc467166a2eaca, type: 2}
-  - {fileID: 11400000, guid: 6bae4040252b0b24fba0cbb676d25614, type: 2}
-  - {fileID: 11400000, guid: 4ca4bd89890c2c14cbb889146e7860d8, type: 2}
-  - {fileID: 11400000, guid: 462e11bc06466c14aa1ace111b60c3dd, type: 2}
-  - {fileID: 11400000, guid: f977cd4dcd16fb0408c070e27dccaac3, type: 2}
-  - {fileID: 11400000, guid: ba3bb7bf971b6d848b039b9af47aac7b, type: 2}
-  powerupPlanear: 0
-  powerupDetectorOro: 0
-  powerupDobleSalto: 0
-  powerupPicoPyrositico: 0
-  powerupImanMonedas: 0
-  powerupImanPyrosita: 0
-  powerupEmisorFrecuencia: 0
-  powerupMaquinaNaturaleza: 0
-  powerupDelorean: 0
-  powerupPotenciadorCerebral: 0
-  powerupTelescopio: 0
-  powerupMochilaLimpieza: 0
-  powerupCompactadorFragmentos: 0
-  powerupAura: 0
-  allRecipes:
-  - {fileID: 11400000, guid: 732c63b6e5163e348949e64cdc64f2d8, type: 2}
-  - {fileID: 11400000, guid: 22bdd3626e50ef8429d0fbd9e29fc855, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  allGuns:
+  - {fileID: 11400000, guid: 817453b0e92a788479e369ce55475947, type: 2}
+  - {fileID: 11400000, guid: 200f03dff08782646a057a11ec2938bd, type: 2}
+  - {fileID: 11400000, guid: 3da06266b0ca25b44add88b77f33f3d5, type: 2}
+  - {fileID: 11400000, guid: 6d2dd5934d9d1824b9bdd9a0ac5a7e2b, type: 2}
+  bulletMaxLifeTime: 6
+  noWeaponLogo: {fileID: 21300000, guid: 0d1980f3d2065e94ab5a49a99b4dc91f, type: 3}

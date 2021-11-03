@@ -60,14 +60,14 @@ public class ParallaxController : MonoBehaviour
             float parallaxOffsetX = (distToCamera * layerSpeed * parallaxSensitivity);
             Vector3 newPos = list[i].originalPosition + Vector3.right * parallaxOffsetX;
             ParallaxRestrainer restrainer = list[i].transform.GetComponent<ParallaxRestrainer>();
-            Debug.Log("Object: "+list[i].transform.name+"; CameraCenter = " + cameraCenter + "; distToCamera = "+ distToCamera + "; parallaxOffsetX = "+ parallaxOffsetX + "; newPos = "+ newPos);
+            //Debug.Log("Object: "+list[i].transform.name+"; CameraCenter = " + cameraCenter + "; distToCamera = "+ distToCamera + "; parallaxOffsetX = "+ parallaxOffsetX + "; newPos = "+ newPos);
             if (restrainer != null)
             {
                 if (restrainer.restrainXToLeft && newPos.x < list[i].originalPosition.x) newPos.x = list[i].originalPosition.x;
                 if(restrainer.restrainXToRight && newPos.x > list[i].originalPosition.x) newPos.x = list[i].originalPosition.x;
                 float cameraOffset =-(cameraWorldWidth / 2 * restrainer.cameraOffsetX);
                 newPos.x += cameraOffset;
-                Debug.Log("Restrainer found! = "+ cameraOffset + "; newPos.x = "+ newPos.x + ";restrainer.restrainXToLeft  = "+ restrainer.restrainXToLeft + "; restrainer.restrainXToRight = " + restrainer.restrainXToRight);
+                //Debug.Log("Restrainer found! = "+ cameraOffset + "; newPos.x = "+ newPos.x + ";restrainer.restrainXToLeft  = "+ restrainer.restrainXToLeft + "; restrainer.restrainXToRight = " + restrainer.restrainXToRight);
             }
             list[i].transform.position = newPos;
         }

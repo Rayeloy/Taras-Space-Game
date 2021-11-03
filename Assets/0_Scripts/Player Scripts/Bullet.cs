@@ -15,6 +15,7 @@ public class Bullet : MonoBehaviour
     public Vector3 currentVel;
 
     float originalZRoot;
+    public GameObject impactPrefab;
 
     public void KonoAwake(float _speed, float _damage, float _range, Vector2 dir)
     {
@@ -43,7 +44,7 @@ public class Bullet : MonoBehaviour
 
         if (distanceTravelled >= range)
         {
-            Destroy();
+            Destroy(gameObject);
         }
 
         MoveBullet();
@@ -58,7 +59,7 @@ public class Bullet : MonoBehaviour
     void Destroy()
     {
         //Impact VFX
-
+        if (impactPrefab != null) Instantiate(impactPrefab, transform.position, Quaternion.identity, transform.parent);
         //Impact sound
 
         //Explosion?
@@ -70,15 +71,19 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.gameObject.CompareTag("Enemy"))
+        if (other.isTrigger) return;
+        if (other.gameObject.CompareTag("Enemy"))
         {
             //Damage enemy;
+            other.GetComponent<EnemyAIHealth>().ReceiveDamage(damage);
+            Debug.Log("Bullet collided with " + other.gameObject.name);
             Destroy();
             return;
         }
         else if(!other.gameObject.CompareTag("Player"))
         {
             //Debug.Log("Bullet collided with " + other.gameObject.name);
+            Debug.Log("Bullet collided with " + other.gameObject.name);
             Destroy();
             return;
         }

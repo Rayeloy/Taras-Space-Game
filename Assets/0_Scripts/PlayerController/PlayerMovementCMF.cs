@@ -215,10 +215,12 @@ public class PlayerMovementCMF : MonoBehaviour
 
         PlayerStarts();
     }
+
     private void PlayerStarts()
     {
         collCheck.KonoStart();
         myPlayerWeapon.KonoStart();
+        myPlayerAnimations.KonoStart();
     }
 
     #endregion
@@ -606,10 +608,10 @@ public class PlayerMovementCMF : MonoBehaviour
     #region JUMP ---------------------------------------------------
     void PressA()
     {
-        Debug.Log("TRY JUMP");
+        //Debug.Log("TRY JUMP");
         if (!StartJump())
         {
-            Debug.Log("FAILED JUMP... TRY JETPACK");
+            //Debug.Log("FAILED JUMP... TRY JETPACK");
             myPlayerJetpack.StartJetpack();
         }
     }
@@ -691,8 +693,6 @@ public class PlayerMovementCMF : MonoBehaviour
                 timePressingJump = 0;
                 collCheck.StartJump();
                 //StopBufferedInput(PlayerInput.WallJump);
-                myPlayerAnimations.skeletonAnim.Skeleton.SetAttachment("weapon", null);
-
             }
         }
 
@@ -744,7 +744,7 @@ public class PlayerMovementCMF : MonoBehaviour
     public void RotateCharacter(bool right)
     {
         if ((right && rotateObj.localRotation.eulerAngles.y == 0)||(!right && rotateObj.localRotation.eulerAngles.y==180)) return;
-        Debug.Log("Rotation char to " + (right ? "right" : "left"));
+        //Debug.Log("Rotation char to " + (right ? "right" : "left"));
         if (right)
         {
             rotateObj.localRotation = Quaternion.Euler(0, 0, 0);

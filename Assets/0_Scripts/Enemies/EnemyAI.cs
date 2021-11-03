@@ -20,6 +20,7 @@ public class EnemyAI : MonoBehaviour
     public EnemyData myEnemyData;
     public EnemyAICliffCheck myCliffCheck;
     public EnemyAIWallCheck myWallCheck;
+    public EnemyAIHealth myEnemyAIHealth;
 
     public EnemyAIState state = EnemyAIState.None;
 
@@ -41,10 +42,22 @@ public class EnemyAI : MonoBehaviour
     //PURSUING
     GameObject pursuedPlayer;
 
+    //STAGGERED
+    public float maxTimeStaggered = 0.5f;
+    public float currentTimeStaggered = 0;
+    public bool staggered
+    {
+        get
+        {
+            return state == EnemyAIState.Staggered;
+        }
+    }
+
     protected virtual void Awake()
     {
         originalPosition = transform.position;
         myEnemyAIMovement.KonoAwake();
+        myEnemyAIHealth.KonoAwake();
     }
 
     protected virtual void Start()
@@ -123,6 +136,13 @@ public class EnemyAI : MonoBehaviour
                 }
                 else if (myEnemyAIMovement.noInput) myEnemyAIMovement.noInput = false;
                 break;
+            case EnemyAIState.Staggered:
+                if(currentTimeStaggered >= maxTimeStaggered)
+                {
+                    StopStaggered();
+                }
+                currentTimeStaggered += Time.deltaTime;
+                break;
 
             case EnemyAIState.Dying:
                 //if(EnemyAIAnimations.dyingAnimation.finished)
@@ -159,6 +179,7 @@ public class EnemyAI : MonoBehaviour
 
     public void StartPursuing(GameObject player)
     {
+        if (staggered || state == EnemyAIState.Pursuing ||state == EnemyAIState.Returning) return;
         state = EnemyAIState.Pursuing;
         pursuedPlayer = player;
     }
@@ -168,6 +189,18 @@ public class EnemyAI : MonoBehaviour
         StartPatrolling();
         pursuedPlayer = null;
         myEnemyAIMovement.noInput = false;
+    }
+
+    public void StartStaggered()
+    {
+        state = EnemyAIState.Staggered;
+        currentTimeStaggered = 0;
+    }
+
+    public void StopStaggered()
+    {
+        state = EnemyAIState.Patrolling;
+        StartPursuing(PlayerMovementCMF.instance.gameObject);
     }
 
     #region --- CHARACTER ROTATION ---

@@ -17,7 +17,7 @@ MonoBehaviour:
   firingMode: 1
   ammoType: 4
   bulletsPerShot: 1
-  maxRange: 15
+  maxRange: 10
   shootFrequency: 1
   shootingKnockback: 1
   spreadAngle: 2
@@ -28,7 +28,7 @@ MonoBehaviour:
   bulletDamage: 3
   bulletSpeed: 25
   bulletDropForce: 0
-  bulletPrefab: {fileID: 6656462881126542585, guid: 700828bec299c53478188e9ed9f2f9b4, type: 3}
+  bulletPrefab: {fileID: 6656462881126542585, guid: eff417b3e94e51747a0e6407e004094f, type: 3}
   spineWeaponName: 
   gunLogo: {fileID: 21300000, guid: b5e917c099b00f44c9e2ec4acc94bcf2, type: 3}
-  currentBulletsInClip: 12
+  currentBulletsInClip: 14

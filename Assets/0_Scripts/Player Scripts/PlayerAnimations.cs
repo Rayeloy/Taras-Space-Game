@@ -20,13 +20,23 @@ public class PlayerAnimations : MonoBehaviour
     [Header("--- Spine Animations ---")]
     public SkeletonAnimation skeletonAnim;
     public AnimationReferenceAsset playerAnimIdle, playerAnimWalking, playerAnimJumping, playerAnimLanding, playerAnimWalkingBackwards, playerAnimFalling;
+    public AnimationReferenceAsset playerAimingPose, playerNotAimingPose;
     public PlayerAnimationState animationSt = PlayerAnimationState.None;
     public float idleTimeScale = 1, walkingTimeScale = 1, walkingBackTimeScale = 1, jumpingTimeScale = 1, landingTimeScale = 1, fallingTimeScale = 1;
     public float timeToFloorToStartLandingAnim = 3;
 
+    Spine.Bone weaponAimIKBone;
+
+
     public void KonoAwake()
     {
         myPlayerMov = GetComponent<PlayerMovementCMF>();
+    }
+
+    public void KonoStart()
+    {
+        weaponAimIKBone = skeletonAnim.skeleton.FindBone("AIM");
+        skeletonAnim.UpdateLocal += SkeletonAnimation_UpdateLocal;
     }
 
     public void KonoUpdate()
@@ -34,6 +44,12 @@ public class PlayerAnimations : MonoBehaviour
         ManageAnimations();
 
         ProcessAnimationStates();
+    }
+
+    void SkeletonAnimation_UpdateLocal(ISkeletonAnimation animated)
+    {
+        Vector3 localPositon = skeletonAnim.transform.InverseTransformPoint(myPlayerMov.myPlayerWeapon.aimTarget.position);
+        weaponAimIKBone.SetLocalPosition(localPositon);
     }
 
     void ManageAnimations()
@@ -70,7 +86,7 @@ public class PlayerAnimations : MonoBehaviour
 
     public void SetAnimation(AnimationReferenceAsset animation, bool loop, float timeScale)
     {
-        Debug.LogWarning("ANIMATION CHANGED TO " + animation.Animation);
+        //Debug.LogWarning("ANIMATION CHANGED TO " + animation.Animation);
         skeletonAnim.state.SetAnimation(0, animation, loop).TimeScale = timeScale;
         //skeletonAnim.state.SetAnimation(1, animation, loop).TimeScale = timeScale;
     }
@@ -89,7 +105,7 @@ public class PlayerAnimations : MonoBehaviour
                 float walkingAnimTimeScale = walkingTimeScale * movementSpeedPercent;
                 //Debug.Log("WALKING ANIMATION: currentSpeed = " + myPlayerMov.currentSpeed + "; maxMoveSpeed = " + myPlayerMov.maxMoveSpeed + "; movementSpeedPercent = " + movementSpeedPercent+
                 //    "; walkingAnimTimeScale = " + walkingAnimTimeScale);
-                Debug.Log(";player vel.x = " + myPlayerMov.currentVel.x + "; char rotation = " + myPlayerMov.rotateObj.localRotation.eulerAngles.y);
+                //Debug.Log(";player vel.x = " + myPlayerMov.currentVel.x + "; char rotation = " + myPlayerMov.rotateObj.localRotation.eulerAngles.y);
                 if ((myPlayerMov.currentVel.x<0 && myPlayerMov.rotateObj.localRotation.eulerAngles.y==0) || (myPlayerMov.currentVel.x >0 && myPlayerMov.rotateObj.localRotation.eulerAngles.y == 180))
                 {
                     walkingAnimTimeScale = walkingBackTimeScale * movementSpeedPercent;
@@ -122,7 +138,7 @@ public class PlayerAnimations : MonoBehaviour
             case PlayerAnimationState.Walking:
                 float movementSpeedPercent = myPlayerMov.currentSpeed / myPlayerMov.currentMaxMoveSpeed;
                 float walkingAnimTimeScale = 0;
-                Debug.Log("myPlayerMov.currentSpeed = " + myPlayerMov.currentSpeed + "; myPlayerMov.currentMaxMoveSpeed = " + myPlayerMov.currentMaxMoveSpeed);
+                //Debug.Log("myPlayerMov.currentSpeed = " + myPlayerMov.currentSpeed + "; myPlayerMov.currentMaxMoveSpeed = " + myPlayerMov.currentMaxMoveSpeed);
                 if (skeletonAnim.state.GetCurrent(0).Animation == playerAnimWalking.Animation)
                 {
                     if ((myPlayerMov.currentVel.x < 0 && myPlayerMov.rotateObj.localRotation.eulerAngles.y == 0) || (myPlayerMov.currentVel.x > 0 && myPlayerMov.rotateObj.localRotation.eulerAngles.y == 180))
@@ -150,5 +166,23 @@ public class PlayerAnimations : MonoBehaviour
                 skeletonAnim.state.GetCurrent(0).TimeScale = walkingAnimTimeScale;
                 break;
         }
+    }
+
+    public void SetAimingPose()
+    {
+        skeletonAnim.state.SetAnimation(1, playerAimingPose, false).TimeScale = 1;
+    }
+    public void SetNotAimingPose()
+    {
+        skeletonAnim.state.SetAnimation(1, playerNotAimingPose, false).TimeScale = 1;
+    }
+    public void SetNoWeaponPose()
+    {
+        skeletonAnim.state.SetEmptyAnimation(1, 0.2f);
+    }
+
+    public void ActivateAttatchment(string slotName, string attatchmentName)
+    {
+        skeletonAnim.Skeleton.SetAttachment(slotName, attatchmentName);
     }
 }
