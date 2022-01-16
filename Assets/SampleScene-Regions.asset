@@ -16,7 +16,7 @@ MonoBehaviour:
   - name: Region #0
     area:
       serializedVersion: 2
-      x: -13.119049
+      x: -13.119045
       y: 16.084396
-      width: 41.21582
-      height: 22.765602
+      width: 39.191574
+      height: 18.453312

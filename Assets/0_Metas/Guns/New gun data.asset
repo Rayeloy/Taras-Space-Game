@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bc8fb0d32405f94ea04f80d94421f5c, type: 3}
+  m_Name: New gun data
+  m_EditorClassIdentifier: 
+  unlocked: 0
+  gunType: 0
+  firingMode: 0
+  ammoType: 0
+  bulletsPerShot: 1
+  maxRange: 20
+  shootFrequency: 0.1
+  shootingKnockback: 1
+  spreadAngle: 0
+  spreadType: 0
+  burstAmount: 3
+  maxClipSize: 20
+  reloadMaxTime: 1.5
+  bulletDamage: 1
+  bulletSpeed: 20
+  bulletDropForce: 0
+  bulletPrefab: {fileID: 0}
+  spineWeaponName: 
+  gunLogo: {fileID: 0}
+  currentBulletsInClip: 0

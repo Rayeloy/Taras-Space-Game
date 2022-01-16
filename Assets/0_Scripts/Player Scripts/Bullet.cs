@@ -60,7 +60,7 @@ public class Bullet : MonoBehaviour
     {
         //Impact VFX
         if (impactPrefab != null) Instantiate(impactPrefab, transform.position, Quaternion.identity, transform.parent);
-        //Impact sound
+        //Impact sound TODO
 
         //Explosion?
 
