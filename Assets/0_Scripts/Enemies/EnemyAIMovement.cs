@@ -192,7 +192,7 @@ public class EnemyAIMovement : MonoBehaviour
     public void SetVelocity(Vector3 vel)
     {
         currentVel = vel;
-        Vector3 horVel = new Vector3(currentVel.x, 0, currentVel.z);
+        Vector3 horVel = new Vector3(currentVel.x, 0, 0);
         currentSpeed = horVel.magnitude;
     }
 
@@ -246,7 +246,7 @@ public class EnemyAIMovement : MonoBehaviour
     void HorizontalMovement()
     {
         float finalMovingAcc = 0;
-        Vector3 horizontalVel = new Vector3(currentVel.x, 0, currentVel.z);
+        Vector3 horizontalVel = new Vector3(currentVel.x, 0, 0);
         #region//------------------------------------------------ DECIDO TIPO DE MOVIMIENTO --------------------------------------------
         #region//----------------------------------------------------- Efecto externo --------------------------------------------
         #endregion
@@ -317,10 +317,10 @@ public class EnemyAIMovement : MonoBehaviour
         #endregion
         #endregion
         #region//------------------------------------------------ PROCESO EL TIPO DE MOVIMIENTO DECIDIDO ---------------------------------
-        Vector3 horVel = new Vector3(currentVel.x, 0, currentVel.z);
+        Vector3 horVel = new Vector3(currentVel.x, 0, 0);
         //if (currentSpeed != 0) print("CurrentVel before processing= " + currentVel.ToString("F6") + "; currentSpeed =" + currentSpeed.ToString("F4") +
         //    "; MoveState = " + moveSt + "; currentMaxMoveSpeed = " + finalMaxMoveSpeed + "; below = " + collCheck.below + "; horVel.magnitude = " + horVel.magnitude+ "; finalMovingAcc = " + finalMovingAcc.ToString("F4"));
-        horizontalVel = new Vector3(currentVel.x, 0, currentVel.z);
+        horizontalVel = new Vector3(currentVel.x, 0, 0);
         switch (moveSt)
         {
             case MoveState.Moving: //MOVING WITH JOYSTICK
@@ -330,23 +330,23 @@ public class EnemyAIMovement : MonoBehaviour
                 float auxAngle = Vector3.Angle(oldCurrentVel, newDir);
 
                 horizontalVel = newDir.normalized * currentSpeed;
-                currentVel = new Vector3(horizontalVel.x, currentVel.y, horizontalVel.z);
+                currentVel = new Vector3(horizontalVel.x, currentVel.y, 0);
                 break;
             case MoveState.NotMoving: //NOT MOVING JOYSTICK
                 horizontalVel = horizontalVel.normalized * currentSpeed;
-                currentVel = new Vector3(horizontalVel.x, currentVel.y, horizontalVel.z);
+                currentVel = new Vector3(horizontalVel.x, currentVel.y, 0);
                 break;
 
             case MoveState.MovingBreaking://FRENADA FUERTE
                 newDir = horizontalVel.normalized + (currentInputDir * finalMovingAcc * Time.deltaTime);
                 horizontalVel = newDir.normalized * currentSpeed;
-                currentVel = new Vector3(horizontalVel.x, currentVel.y, horizontalVel.z);
+                currentVel = new Vector3(horizontalVel.x, currentVel.y, 0);
                 break;
             case MoveState.NotBreaking:
                 currentSpeed = horizontalVel.magnitude;
                 break;
         }
-        horVel = new Vector3(currentVel.x, 0, currentVel.z);
+        horVel = new Vector3(currentVel.x, 0, 0);
         //print("CurrentVel after processing= " + currentVel.ToString("F6") + "; CurrentSpeed 1.4 = " + currentSpeed + "; horVel.magnitude = " 
         //    + horVel.magnitude + "; currentInputDir = " + currentInputDir.ToString("F6"));
         #endregion
@@ -493,6 +493,16 @@ public class EnemyAIMovement : MonoBehaviour
     }
 
     #endregion
+
+    public void StartImpulse()
+    {
+        if(myEnemyAI.state == EnemyAIState.Attacking)
+        {
+            Vector3 impulse = myEnemyAI.myEnemyData.attackData.impulseDirection *(myEnemyAI.rotateObj.localRotation.eulerAngles.y == 0?1:-1)* myEnemyAI.myEnemyData.attackData.impulseForce;
+            currentVel = impulse;
+            Debug.Log("CurrentVel = " + currentVel);
+        }
+    }
 
     #endregion
 }

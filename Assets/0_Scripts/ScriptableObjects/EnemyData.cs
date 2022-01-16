@@ -20,4 +20,7 @@ public class EnemyData : ScriptableObject
     public float maxPatrolDistanceX=6, maxDistanceToOriginX=12;
     public float movementSpeed = 4;
 
+    [Header("--- ATTACK ---")]
+    public EnemyAttackData attackData;
+
 }

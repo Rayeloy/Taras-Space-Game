@@ -1,10 +1,11 @@
 {
   "dependencies": {
+    "com.actioncode.cinemachine-regions": "1.1.1",
     "com.unity.2d.animation": "4.2.6",
     "com.unity.2d.pixel-perfect": "3.0.2",
     "com.unity.2d.psdimporter": "3.1.7",
     "com.unity.2d.sprite": "1.0.0",
-    "com.unity.2d.spriteshape": "4.1.4",
+    "com.unity.2d.spriteshape": "4.1.5",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.cinemachine": "2.6.10",
     "com.unity.collab-proxy": "1.3.9",
@@ -47,5 +48,14 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "Action Code",
+      "url": "http://3.137.202.26:4873/",
+      "scopes": [
+        "com.actioncode"
+      ]
+    }
+  ]
 }

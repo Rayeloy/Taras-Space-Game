@@ -19,6 +19,7 @@ public enum MoveState
     NotMoving = 2,//Not stunned, breaking
     MovingBreaking = 4,//Moving but reducing speed by breakAcc till maxMovSpeed
     NotBreaking = 8,
+    Impulse
 }
 
 public enum VerticalMovementState
@@ -53,6 +54,7 @@ public class PlayerMovementCMF : MonoBehaviour
     public PlayerAnimations myPlayerAnimations;
     public PlayerWeapon myPlayerWeapon;
     public PlayerVFX myPlayerVFX;
+    public PlayerHealth myPlayerHealth;
 
 
     public Transform cameraFollow;
@@ -131,6 +133,7 @@ public class PlayerMovementCMF : MonoBehaviour
     public Vector3 currentVel;
     Vector3 oldCurrentVel;
     Vector3 finalVel;
+    Vector3 currentMovingDir;
 
     public float currentSpeed = 0;
     //[HideInInspector]
@@ -198,6 +201,7 @@ public class PlayerMovementCMF : MonoBehaviour
         myPlayerAnimations.KonoAwake();
         myPlayerWeapon.KonoAwake();
         myPlayerVFX.KonoAwake();
+        myPlayerHealth.KonoAwake();
     }
     #endregion
 
@@ -233,6 +237,7 @@ public class PlayerMovementCMF : MonoBehaviour
         myPlayerJetpack.KonoUpdate();
         myPlayerAnimations.KonoUpdate();
         myPlayerWeapon.KonoUpdate();
+        myPlayerHealth.KonoUpdate();
     }
 
     public void KonoFixedUpdate()
@@ -288,7 +293,7 @@ public class PlayerMovementCMF : MonoBehaviour
     public void SetVelocity(Vector3 vel)
     {
         currentVel = vel;
-        Vector3 horVel = new Vector3(currentVel.x, 0, currentVel.z);
+        Vector3 horVel = new Vector3(currentVel.x, 0, 0);
         currentSpeed = horVel.magnitude;
     }
 
@@ -331,7 +336,7 @@ public class PlayerMovementCMF : MonoBehaviour
     void HorizontalMovement()
     {
         float finalMovingAcc = 0;
-        Vector3 horizontalVel = new Vector3(currentVel.x, 0, currentVel.z);
+        Vector3 horizontalVel = new Vector3(currentVel.x, 0, 0);
         #region//------------------------------------------------ DECIDO TIPO DE MOVIMIENTO --------------------------------------------
         #region//----------------------------------------------------- Efecto externo --------------------------------------------
         #endregion
@@ -406,36 +411,36 @@ public class PlayerMovementCMF : MonoBehaviour
         #endregion
         #endregion
         #region//------------------------------------------------ PROCESO EL TIPO DE MOVIMIENTO DECIDIDO ---------------------------------
-        Vector3 horVel = new Vector3(currentVel.x, 0, currentVel.z);
+        Vector3 horVel = new Vector3(currentVel.x, 0,0);
         //if (currentSpeed != 0) print("CurrentVel before processing= " + currentVel.ToString("F6") + "; currentSpeed =" + currentSpeed.ToString("F4") +
         //    "; MoveState = " + moveSt + "; currentMaxMoveSpeed = " + finalMaxMoveSpeed + "; below = " + collCheck.below + "; horVel.magnitude = " + horVel.magnitude+ "; finalMovingAcc = " + finalMovingAcc.ToString("F4"));
-        horizontalVel = new Vector3(currentVel.x, 0, currentVel.z);
+        horizontalVel = new Vector3(currentVel.x, 0, 0);
         switch (moveSt)
         {
             case MoveState.Moving: //MOVING WITH JOYSTICK
-                Vector3 newDir;
-                    Vector3 oldDir = horizontalVel.magnitude == 0 ? rotateObj.forward.normalized : horizontalVel.normalized;
-                    newDir = oldDir + (currentInputDir * (finalMovingAcc * Time.deltaTime));
-                    float auxAngle = Vector3.Angle(oldCurrentVel, newDir);
-
-                horizontalVel = newDir.normalized * currentSpeed;
-                currentVel = new Vector3(horizontalVel.x, currentVel.y, horizontalVel.z);
+                Vector3 oldDir = currentMovingDir;
+                currentMovingDir = oldDir + (currentInputDir * (finalMovingAcc * Time.deltaTime));
+                if (currentMovingDir.magnitude > 1) currentMovingDir.Normalize();
+                //Debug.Log("oldDir = "+ oldDir.ToString("F6") + "; newDir = " + currentMovingDir.ToString("F6") + "; currentInputDir = "+ currentInputDir + "; finalMovingAcc = " + finalMovingAcc+
+                //    " (currentInputDir * (finalMovingAcc * Time.deltaTime)) = "+ (currentInputDir * (finalMovingAcc * Time.deltaTime)).ToString("F6"));
+                horizontalVel = currentMovingDir * currentSpeed;
+                currentVel = new Vector3(horizontalVel.x, currentVel.y, 0);
                 break;
             case MoveState.NotMoving: //NOT MOVING JOYSTICK
                 horizontalVel = horizontalVel.normalized * currentSpeed;
-                currentVel = new Vector3(horizontalVel.x, currentVel.y, horizontalVel.z);
+                currentVel = new Vector3(horizontalVel.x, currentVel.y, 0);
                 break;
 
             case MoveState.MovingBreaking://FRENADA FUERTE
-                newDir = horizontalVel.normalized + (currentInputDir * finalMovingAcc * Time.deltaTime);
-                horizontalVel = newDir.normalized * currentSpeed;
-                currentVel = new Vector3(horizontalVel.x, currentVel.y, horizontalVel.z);
+                currentMovingDir = horizontalVel.normalized + (currentInputDir * finalMovingAcc * Time.deltaTime);
+                horizontalVel = currentMovingDir.normalized * currentSpeed;
+                currentVel = new Vector3(horizontalVel.x, currentVel.y, 0);
                 break;
             case MoveState.NotBreaking:
                 currentSpeed = horizontalVel.magnitude;
                 break;
         }
-        horVel = new Vector3(currentVel.x, 0, currentVel.z);
+        horVel = new Vector3(currentVel.x, 0, 0);
         //print("CurrentVel after processing= " + currentVel.ToString("F6") + "; CurrentSpeed 1.4 = " + currentSpeed + "; horVel.magnitude = " 
         //    + horVel.magnitude + "; currentInputDir = " + currentInputDir.ToString("F6"));
         #endregion
@@ -460,6 +465,11 @@ public class PlayerMovementCMF : MonoBehaviour
     public void ResetPlayerRotationSpeed()
     {
         rotationRestrictedPercentage = 1;
+    }
+
+    public void ReceiveKnockback(Vector2 knockback)
+    {
+        SetVelocity(knockback);
     }
 
     #endregion

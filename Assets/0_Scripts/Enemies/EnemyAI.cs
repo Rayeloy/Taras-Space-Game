@@ -21,6 +21,7 @@ public class EnemyAI : MonoBehaviour
     public EnemyAICliffCheck myCliffCheck;
     public EnemyAIWallCheck myWallCheck;
     public EnemyAIHealth myEnemyAIHealth;
+    public EnemyAIAttack myEnemyAIAttack;
 
     public EnemyAIState state = EnemyAIState.None;
 
@@ -58,16 +59,21 @@ public class EnemyAI : MonoBehaviour
         originalPosition = transform.position;
         myEnemyAIMovement.KonoAwake();
         myEnemyAIHealth.KonoAwake();
+        myEnemyAIAttack.KonoAwake();
     }
 
     protected virtual void Start()
     {
-        myEnemyAIMovement.KonoStart();       
+        myEnemyAIMovement.KonoStart();
+        MasterManager.GameDataManager.AddReward(RewardType.GunAmmo, 3000);
+        MasterManager.GameDataManager.AddReward(RewardType.ARAmmo, 3000);
+        MasterManager.GameDataManager.AddReward(RewardType.ShotgunAmmo, 3000);
     }
 
     protected virtual void Update()
     {
         myEnemyAIMovement.KonoUpdate();
+        myEnemyAIAttack.KonoUpdate();
     }
     protected virtual void FixedUpdate()
     {
@@ -179,7 +185,7 @@ public class EnemyAI : MonoBehaviour
 
     public void StartPursuing(GameObject player)
     {
-        if (staggered || state == EnemyAIState.Pursuing ||state == EnemyAIState.Returning) return;
+        if (staggered || state == EnemyAIState.Pursuing ||state == EnemyAIState.Returning || (state == EnemyAIState.Attacking && myEnemyAIAttack.attackState != EnemyAttackState.CD)) return;
         state = EnemyAIState.Pursuing;
         pursuedPlayer = player;
     }

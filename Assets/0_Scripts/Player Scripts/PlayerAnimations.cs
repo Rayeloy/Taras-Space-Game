@@ -170,11 +170,11 @@ public class PlayerAnimations : MonoBehaviour
 
     public void SetAimingPose()
     {
-        skeletonAnim.state.SetAnimation(1, playerAimingPose, false).TimeScale = 1;
+        skeletonAnim.state.SetAnimation(1, playerAimingPose, true).TimeScale = 1;
     }
     public void SetNotAimingPose()
     {
-        skeletonAnim.state.SetAnimation(1, playerNotAimingPose, false).TimeScale = 1;
+        skeletonAnim.state.SetAnimation(1, playerNotAimingPose, true).TimeScale = 1;
     }
     public void SetNoWeaponPose()
     {

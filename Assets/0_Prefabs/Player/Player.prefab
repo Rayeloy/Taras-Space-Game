@@ -252,6 +252,7 @@ MonoBehaviour:
   myPlayerAnimations: {fileID: 2461458221747096520}
   myPlayerWeapon: {fileID: 2461458221747096522}
   myPlayerVFX: {fileID: 2461458221747096525}
+  myPlayerHealth: {fileID: 1258442145902912418}
   cameraFollow: {fileID: 2461458221656147305}
   rotateObj: {fileID: 2461458222314174945}
   instantRotationMinAngle: 120
@@ -388,7 +389,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  maxHealth: 0
+  maxHealth: 100
+  maxInvincibilityTime: 2
+  invincible: 0
 --- !u!114 &2461458221747096521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5372,7 +5375,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2461458222180839882}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.0036010742, y: -0.46423912, z: 0}
+  m_LocalPosition: {x: 0.0036005974, y: -0.46424103, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2461458223376647468}
@@ -10273,7 +10276,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2461458223333429188}
   m_LocalRotation: {x: -0, y: -0, z: 0.7435588, w: 0.6686705}
-  m_LocalPosition: {x: 0.14311409, y: 0.3066826, z: 0}
+  m_LocalPosition: {x: 0.14311385, y: 0.3066826, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2461458222792714261}

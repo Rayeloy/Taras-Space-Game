@@ -21,3 +21,4 @@ MonoBehaviour:
   maxPatrolDistanceX: 6
   maxDistanceToOriginX: 14
   movementSpeed: 4
+  attackData: {fileID: 11400000, guid: 4cf47356b136bc5428b2474d57fd4549, type: 2}

@@ -42,11 +42,29 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background+3
+    uniqueID: 3893800715
+    locked: 0
+  - name: Background+2
+    uniqueID: 95610435
+    locked: 0
+  - name: Background+1
+    uniqueID: 3326922927
+    locked: 0
   - name: Background
     uniqueID: 2695149891
     locked: 0
-  - name: Middleground-1
+  - name: Middleground+4
     uniqueID: 505630859
+    locked: 0
+  - name: Middleground+3
+    uniqueID: 125294691
+    locked: 0
+  - name: Middleground+2
+    uniqueID: 2966423639
+    locked: 0
+  - name: Middleground+1
+    uniqueID: 1219278949
     locked: 0
   - name: Default
     uniqueID: 0
@@ -56,4 +74,13 @@ TagManager:
     locked: 0
   - name: Foreground
     uniqueID: 4214545871
+    locked: 0
+  - name: Foreground-1
+    uniqueID: 3833221717
+    locked: 0
+  - name: Foreground-2
+    uniqueID: 204556105
+    locked: 0
+  - name: Foreground-3
+    uniqueID: 1872383535
     locked: 0

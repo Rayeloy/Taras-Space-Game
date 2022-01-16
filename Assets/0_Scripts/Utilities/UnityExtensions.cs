@@ -51,9 +51,9 @@ namespace EloyExtensions
             if (str.Length == 0) return str;
 
             if (str.Length == 1)
-                return(""+char.ToUpper(str[0]));
+                return ("" + char.ToUpper(str[0]));
             else
-                return(char.ToUpper(str[0]) + str.Substring(1));
+                return (char.ToUpper(str[0]) + str.Substring(1));
         }
 
         public static void SetSpritesAlpha_r(Transform transf, float alpha)
@@ -61,7 +61,7 @@ namespace EloyExtensions
             Image image = transf.GetComponent<Image>();
             SpriteRenderer spriteRend = transf.GetComponent<SpriteRenderer>();
 
-            if(image != null)
+            if (image != null)
             {
                 Color newColor = image.color;
                 newColor.a = alpha;
@@ -80,19 +80,29 @@ namespace EloyExtensions
             }
         }
 
+        public static void SetSortingLayer_r(Transform transf, string sortingLayerID)
+        {
+            SpriteRenderer spriteRend = transf.GetComponent<SpriteRenderer>();
+            if (spriteRend && spriteRend.sortingLayerName != sortingLayerID) spriteRend.sortingLayerName = sortingLayerID;
+            for (int i = 0; i < transf.childCount; i++)
+            {
+                SetSortingLayer_r(transf.GetChild(i), sortingLayerID);
+            }
+        }
+
         public static string AddThousandsSeparators(string numberInt)
         {
             int cumulativeUnits = 0;
             string result = "";
-            for (int i = numberInt.Length-1; i >=0; i--)
+            for (int i = numberInt.Length - 1; i >= 0; i--)
             {
                 cumulativeUnits++;
-                result = numberInt[i]+result;
-                if (cumulativeUnits == 3 && i>0)
+                result = numberInt[i] + result;
+                if (cumulativeUnits == 3 && i > 0)
                 {
                     cumulativeUnits = 0;
                     result = "." + result;
-                }          
+                }
             }
             return result;
         }
@@ -128,6 +138,144 @@ namespace EloyExtensions
                 }
             }
             return null;
+        }
+
+        public static string IntArrayToString(int[] array)
+        {
+            string result = "(";
+            for (int i = 0; i < array.Length; i++)
+            {
+                result += array[i].ToString() + (i == array.Length - 1 ? ")" : ",");
+            }
+            return result;
+        }
+
+        public static string FloatArrayToString(float[] array)
+        {
+            string result = "(";
+            for (int i = 0; i < array.Length; i++)
+            {
+                result += array[i].ToString() + (i == array.Length - 1 ? ")" : ",");
+            }
+            return result;
+        }
+
+        public static string Vector2ArrayToString(Vector2[] array)
+        {
+            string result = "(";
+            for (int i = 0; i < array.Length; i++)
+            {
+                result += "(" + array[i].x + "," + array[i].y + ")" + (i == array.Length - 1 ? ")" : ", ");
+            }
+            return result;
+        }
+
+        public static string Vector2ListToString(List<Vector2> array)
+        {
+            string result = "(";
+            for (int i = 0; i < array.Count; i++)
+            {
+                result += "(" + array[i].x + "," + array[i].y + ")" + (i == array.Count - 1 ? ")" : ", ");
+            }
+            return result;
+        }
+
+        public static string Vector3ArrayToString(Vector3[] array)
+        {
+            string result = "(";
+            for (int i = 0; i < array.Length; i++)
+            {
+                result += "(" + array[i].x + "," + array[i].y + ")" + (i == array.Length - 1 ? ")" : ", ");
+            }
+            return result;
+        }
+
+        public static List<T> CloneList<T>(List<T> referenceList)
+        {
+            List<T> newList = new List<T>();
+            for (int i = 0; i < referenceList.Count; i++)
+            {
+                newList.Add(referenceList[i]);
+            }
+            return newList;
+        }
+
+        [System.Serializable]
+        public class ParentRendBounds
+        {
+            public Vector3 Min
+            {
+                get
+                {
+                    return min;
+                }
+            }
+            public Vector3 Max
+            {
+                get
+                {
+                    return max; ;
+                }
+            }
+            public Vector3 Center
+            {
+                get
+                {
+                    return center; ;
+                }
+            }
+            public Vector3 Extents
+            {
+                get
+                {
+                    return extents; ;
+                }
+            }
+            Vector3 min, max, center, extents;
+            Transform parent;
+            List<Renderer> rendList;
+            public ParentRendBounds(Transform _parent)
+            {
+                parent = _parent;
+                rendList = new List<Renderer>();
+                R_AddChildSRendToList(parent);
+                UpdateBounds();
+            }
+
+            void R_AddChildSRendToList(Transform parent)
+            {
+                Renderer rend = parent.GetComponent<Renderer>();
+                if (rend != null) rendList.Add(rend);
+
+                for (int i = 0; i < parent.childCount; i++)
+                {
+                    if (parent.GetChild(i).gameObject.activeInHierarchy)
+                        R_AddChildSRendToList(parent.GetChild(i));
+                }
+            }
+
+            void UpdateBounds()
+            {
+                //Debug.Log("Updating SRend Bounds for " + parent.name);
+                max.x = float.MinValue;
+                min.x = float.MaxValue;
+
+                max.y = float.MinValue;
+                min.y = float.MaxValue;
+                for (int i = 0; i < rendList.Count; i++)
+                {
+                    //Debug.Log("Updating bounds: child "+i+" " + sRendList[i].name+ "; new max X = "+ sRendList[i].bounds.max + "; old max.x = " + max.x);
+
+                    if (rendList[i].bounds.max.x > max.x) max.x = rendList[i].bounds.max.x;
+                    if (rendList[i].bounds.min.x < min.x) min.x = rendList[i].bounds.min.x;
+                    if (rendList[i].bounds.max.y > max.y) max.y = rendList[i].bounds.max.y;
+                    if (rendList[i].bounds.min.y < min.y) min.y = rendList[i].bounds.min.y;
+                }
+                extents.x = (max.x - min.x) / 2;
+                extents.y = (max.y - min.y) / 2;
+                center.x = min.x + extents.x;
+                center.y = min.y + extents.y;
+            }
         }
     }
 }
