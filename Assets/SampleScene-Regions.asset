@@ -13,10 +13,38 @@ MonoBehaviour:
   m_Name: SampleScene-Regions
   m_EditorClassIdentifier: 
   regions:
-  - name: Region #0
+  - name: Region #3
     area:
       serializedVersion: 2
-      x: -13.119045
+      x: -18.172695
       y: 16.084396
-      width: 39.191574
-      height: 18.453312
+      width: 44.245224
+      height: 19.355602
+  - name: Region #2
+    area:
+      serializedVersion: 2
+      x: -34.636536
+      y: -3.271206
+      width: 32.265358
+      height: 19.355602
+  - name: Region #3
+    area:
+      serializedVersion: 2
+      x: -44.969425
+      y: -22.626808
+      width: 42.598248
+      height: 19.355602
+  - name: Region #4
+    area:
+      serializedVersion: 2
+      x: 41.073303
+      y: -3.2712097
+      width: 64.50946
+      height: 54.32524
+  - name: Region #6
+    area:
+      serializedVersion: 2
+      x: 26.07254
+      y: 7.6084785
+      width: 15.657433
+      height: 28.704731

@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class PlayerJetpack : MonoBehaviour
 {
+    /// <summary>
+    /// Exist the possibilty than in some levels we can't use the jetpack
+    /// </summary>
+    public bool stoleJetpackBool;
+
     public float totalFuel = 100;
     [Range(0, 1)]
     public float jetpackMinFuelToStartPercent = 0.3f;
@@ -21,7 +26,7 @@ public class PlayerJetpack : MonoBehaviour
     [HideInInspector]
     public float currentFuel = 100;
 
-    private bool jetpackStarted = false;
+    private bool isJetpackIgnitiatedBool = false;
 
     public ParticleSystem jetpackParticles;
     public GameObject jetpackLight;
@@ -37,6 +42,11 @@ public class PlayerJetpack : MonoBehaviour
 
     }
 
+    public void KonoStart()
+    {
+        JetpackAvailable(stoleJetpackBool);
+    }
+
     public void KonoUpdate()
     {
         ProcessJetpack();
@@ -46,9 +56,22 @@ public class PlayerJetpack : MonoBehaviour
     {
         get
         {
-            return (!myPlayerMov.jumpInsurance && (!myPlayerMov.collCheck.below || myPlayerMov.collCheck.sliping)) && currentFuel >= totalFuel * jetpackMinFuelToStartPercent;
+            return (!myPlayerMov.jumpInsurance && (!myPlayerMov.collCheck.below || myPlayerMov.collCheck.sliping)) && currentFuel >= totalFuel * jetpackMinFuelToStartPercent && !stoleJetpackBool;
         }
     }
+
+
+
+    public void JetpackAvailable(bool isNotAvailableBool)
+    {
+        if(isNotAvailableBool)
+            myPlayerMov.myPlayerAnimations.ActivateAttatchment("jetpack_png", null);
+        else
+            myPlayerMov.myPlayerAnimations.ActivateAttatchment("jetpack_png", "jetpack_png");
+
+
+    }
+
 
     bool AddFuel(float consumption)
     {
@@ -60,9 +83,9 @@ public class PlayerJetpack : MonoBehaviour
 
     public void StartJetpack()
     {
-        if(!jetpackStarted && canUseJetpack)
+        if(!isJetpackIgnitiatedBool && canUseJetpack)
         {
-            jetpackStarted = true;
+            isJetpackIgnitiatedBool = true;
             AddFuel(-initialConsumption);
             myPlayerMov.StopJump();
             myPlayerMov.vertMovSt = VerticalMovementState.Jetpack;
@@ -76,7 +99,7 @@ public class PlayerJetpack : MonoBehaviour
 
     void ProcessJetpack()
     {
-        if (jetpackStarted)
+        if (isJetpackIgnitiatedBool)
         {
             if (currentFuel == 0 || (myPlayerMov.collCheck.below && !myPlayerMov.collCheck.sliping))
             {
@@ -108,15 +131,28 @@ public class PlayerJetpack : MonoBehaviour
 
     public void EndJetpack()
     {
-        if (jetpackStarted)
+        if (isJetpackIgnitiatedBool)
         {
             //Debug.Log("END JETPACK");
-            jetpackStarted = false;
+            isJetpackIgnitiatedBool = false;
             myPlayerMov.vertMovSt = VerticalMovementState.None;//Is this correct?
             jetpackConsumptionCurrentTime = 0;
             jetpackParticles.Stop(true);
             jetpackLight.SetActive(false);
 
         }
+    }
+
+
+    public void Enter_JetpackCollision(ColliderBridge brCol)
+    {
+        Debug.Log("entro");
+        if (stoleJetpackBool)
+        {
+            stoleJetpackBool = false;
+            JetpackAvailable(stoleJetpackBool);
+            brCol.gameObject.SetActive(false);
+        }
+            
     }
 }

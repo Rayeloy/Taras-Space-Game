@@ -76,22 +76,26 @@ public class PlayerWeapon : MonoBehaviour
 
     public void KonoUpdate()
     {
-        ProcessJoystickInput();
-        ProcessShooting();
-        ProcessReloadGun();
-        UpdateCameraFollowObjOnAim();
-        if (currentGunIndex >= 0)
+        if (!myPlayerMov.myPlayerHealth.isDeadBool)
         {
-            myPlayerMov.myPlayerAnimations.ActivateAttatchment("weapon", "image0");
+            ProcessJoystickInput();
+            ProcessShooting();
+            ProcessReloadGun();
+            UpdateCameraFollowObjOnAim();
+            if (currentGunIndex >= 0)
+            {
+                myPlayerMov.myPlayerAnimations.ActivateAttatchment("weapon", "image0");
+            }
+            if (isAiming)
+            {
+                myPlayerMov.myPlayerAnimations.SetAimingPose();
+            }
+            else
+            {
+                myPlayerMov.myPlayerAnimations.SetNotAimingPose();
+            }
         }
-        if (isAiming)
-        {
-            myPlayerMov.myPlayerAnimations.SetAimingPose();
-        }
-        else
-        {
-            myPlayerMov.myPlayerAnimations.SetNotAimingPose();
-        }
+       
     }
 
     void ProcessJoystickInput()

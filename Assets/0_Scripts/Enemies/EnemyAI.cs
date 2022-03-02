@@ -154,7 +154,6 @@ public class EnemyAI : MonoBehaviour
                 //if(EnemyAIAnimations.dyingAnimation.finished)
                 //DeathVFX?
                 Destroy(gameObject);
-                return;
                 break;
         }
     }
@@ -185,9 +184,25 @@ public class EnemyAI : MonoBehaviour
 
     public void StartPursuing(GameObject player)
     {
-        if (staggered || state == EnemyAIState.Pursuing ||state == EnemyAIState.Returning || (state == EnemyAIState.Attacking && myEnemyAIAttack.attackState != EnemyAttackState.CD)) return;
-        state = EnemyAIState.Pursuing;
-        pursuedPlayer = player;
+        if (staggered || state == EnemyAIState.Pursuing ||state == EnemyAIState.Returning || (state == EnemyAIState.Attacking && myEnemyAIAttack.attackState != EnemyAttackState.CD) || state == EnemyAIState.Dying)
+
+        if (checkIfPlayerPursuedIsStillAliveBool(player))
+         {
+                state = EnemyAIState.Patrolling;
+            }
+         else
+        {
+                state = EnemyAIState.Pursuing;
+                pursuedPlayer = player;
+            }
+
+      
+    }
+
+
+    public bool checkIfPlayerPursuedIsStillAliveBool(GameObject player)
+    {
+        return player.GetComponent<PlayerHealth>().isDeadBool;
     }
 
     public void StopPursuing()

@@ -423,8 +423,8 @@ public class ParallaxLayer
             if (debug) Debug.Log("lastElementRightLimit = "+lastElementRightLimit.ToString("F4"));
             if (Camera.main.WorldToViewportPoint(lastElementRightLimit).x < -0.2f)
             {
-                //Debug.LogError("Setting " + parent.GetChild(i).gameObject + " to inactive ");
-                parent.GetChild(i).gameObject.SetActive(false);
+               
+               // parent.GetChild(i).gameObject.SetActive(false);
             }
         }
     }

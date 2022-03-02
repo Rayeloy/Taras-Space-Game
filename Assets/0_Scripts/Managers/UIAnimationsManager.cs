@@ -67,6 +67,10 @@ public class UIAnimationsManager : MonoBehaviour
     float lastRealTime = 0;
     float currentTime = 0;
 
+    [Header("COIN COUNTER")]
+    [Space]
+    [SerializeField] private Text coinsText;
+    private readonly string _coinsMessage = "Coins";
     private void OnEnable()
     {
         SceneManager.activeSceneChanged += OnSceneLoaded;
@@ -111,6 +115,8 @@ public class UIAnimationsManager : MonoBehaviour
     {
         currentTime = (Time.realtimeSinceStartup - lastRealTime);
         ProcessUIAnimations();
+
+        coinsText.text = _coinsMessage + MasterManager.GameDataManager.GetReward(RewardType.Coins).ToString();
 
         lastRealTime = Time.realtimeSinceStartup;
     }

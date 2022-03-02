@@ -25,7 +25,7 @@ MonoBehaviour:
   burstAmount: 3
   maxClipSize: 20
   reloadMaxTime: 1.5
-  bulletDamage: 1
+  bulletDamage: 100
   bulletSpeed: 20
   bulletDropForce: 0
   bulletPrefab: {fileID: 0}

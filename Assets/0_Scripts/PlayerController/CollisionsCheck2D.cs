@@ -11,7 +11,8 @@ public class CollisionsCheck2D : MonoBehaviour
     public EnemyAI myEnemy;
     [HideInInspector]
     public Collider2D myCollider;
-    Rigidbody2D rb;
+    [HideInInspector]
+    public Rigidbody2D rb;
 
     public bool disableAllDebugs = true;
     public bool disableAllRays = true;

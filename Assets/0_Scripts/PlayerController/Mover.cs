@@ -310,56 +310,6 @@ public class Mover : MonoBehaviour {
 		return isGrounded;
 	}
 
-    #region --- MOVING PLATFORMS ---
-    //Vector3 platformMovement;
-    //Vector3 platformOldWorldPoint;
-    //Vector3 platformOldLocalPoint;
-    //Vector3 platformNewWorldPoint;
-    //bool onMovingPlatform
-    //{
-    //    get
-    //    {
-    //        if (!disableAllDebugs) Debug.Log("onMovingPlatform-> isGrounded = " + isGrounded + "; isGroundTooSteep = "+ isGroundTooSteep + "; GetGroundCollider() = " + GetGroundCollider());
-    //        return isGrounded && !isGroundTooSteep && GetGroundCollider() != null /*&& collisions.lastBelow && collisions.lastFloor != null && collisions.lastFloor == collisions.floor*/;
-    //    }
-    //}
-
-    //void SavePlatformPoint()
-    //{
-    //    if (isGrounded && !isGroundTooSteep && GetGroundCollider() != null)
-    //    {
-    //        platformOldWorldPoint = GetGroundPoint();
-    //        platformOldLocalPoint = GetGroundCollider().transform.InverseTransformPoint(platformOldWorldPoint);
-    //        if (!disableAllDebugs) Debug.Log("OnMovingPlatform true && Save Platform Point: Local = " + platformOldLocalPoint.ToString("F4") + "; world = " + platformOldWorldPoint.ToString("F4"));
-    //    }
-    //}
-
-    //void CalculatePlatformPointMovement()
-    //{
-    //    if (onMovingPlatform)
-    //    {
-    //        if (!disableAllDebugs) Debug.LogWarning("CALCULATE PLATFORM POINT MOVEMENT");
-    //        platformNewWorldPoint = GetGroundCollider().transform.TransformPoint(platformOldLocalPoint);
-    //        platformMovement = platformNewWorldPoint - platformOldWorldPoint;
-    //        if (!disableAllDebugs) Debug.Log("platformOldWorldPoint = " + platformOldWorldPoint.ToString("F4") + "; New Platform Point = " + platformNewWorldPoint.ToString("F4") + "; platformMovement = " + platformMovement.ToString("F4"));
-    //        if (!disableAllDebugs) Debug.DrawLine(platformOldWorldPoint, platformNewWorldPoint, Color.red);
-    //    }
-    //}
-
-    //void ChangePositionWithPlatform()
-    //{
-    //    //Reset platform's movement velocity
-    //    currentPlatformMovement = Vector3.zero;
-
-    //    CalculatePlatformPointMovement();
-
-    //    //transform.Translate(platformMovement, Space.World);
-    //    if (onMovingPlatform)
-    //        currentPlatformMovement = platformMovement * (1/Time.fixedDeltaTime);
-    //    //transform.position += platformMovement;
-
-    //}
-    #endregion
 
     //Setters;
 

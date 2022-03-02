@@ -15,7 +15,7 @@ public class EnemyAIHealth : MonoBehaviour
 
     public void ReceiveDamage(float damageAmount)
     {
-        if (myEnemyAI.state == EnemyAIState.Dying || currentHealth<=0) return;
+        if (myEnemyAI.state == EnemyAIState.Dying) return;
         currentHealth -= damageAmount;
         if (currentHealth <= 0) StartDeath();
         else

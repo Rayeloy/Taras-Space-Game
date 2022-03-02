@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    [HideInInspector] public TimeManager managerTime;
+    public static GameController instance;
     public PlayerMovementCMF Player;
     public float slowmo = 1;
 
     private void Awake()
     {
+        if (instance == null)
+            instance = this;
+
         Player.KonoAwake();
     }
 

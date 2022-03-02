@@ -66,6 +66,8 @@ public class MenuOpcionesScript : MonoBehaviour
     float openingTime = 0;
     float maxBlurVal = 8;
 
+   
+
     private void Awake()
     {
         if (instance == null)
@@ -76,6 +78,22 @@ public class MenuOpcionesScript : MonoBehaviour
         {
             Destroy(this);
         }
+    }
+
+   
+    public void EnableCurrentCanvasGroup(CanvasGroup currentCanvasGroup)
+    {
+
+        currentCanvasGroup.alpha = 1;
+        currentCanvasGroup.blocksRaycasts = true;
+        currentCanvasGroup.interactable = true;
+    }
+
+    public void DisableCurrentCanvasGroup(CanvasGroup currentCanvasGroup)
+    {
+        currentCanvasGroup.alpha = 0;
+        currentCanvasGroup.blocksRaycasts = false;
+        currentCanvasGroup.interactable = false;
     }
 
     public void ThisStart(int section = -1)
@@ -544,6 +562,23 @@ public class MenuOpcionesScript : MonoBehaviour
     //    MasterManager.GameResourcesManager.SonidoClick();
     //    StartClosingAnimation();
     //}
+
+
+    public void ChargeCurrentScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void ChargeOtherScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+
+    }
+
+    public void Quit_Game()
+    {
+        Application.Quit();
+    }
 
     private void OnApplicationQuit()
     {

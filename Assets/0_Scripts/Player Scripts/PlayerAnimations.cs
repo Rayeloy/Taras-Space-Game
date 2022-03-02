@@ -10,7 +10,8 @@ public enum PlayerAnimationState
     Walking,
     Jumping,
     Falling,
-    Landing
+    Landing,
+    Dying
 }
 
 public class PlayerAnimations : MonoBehaviour
@@ -19,7 +20,7 @@ public class PlayerAnimations : MonoBehaviour
 
     [Header("--- Spine Animations ---")]
     public SkeletonAnimation skeletonAnim;
-    public AnimationReferenceAsset playerAnimIdle, playerAnimWalking, playerAnimJumping, playerAnimLanding, playerAnimWalkingBackwards, playerAnimFalling;
+    public AnimationReferenceAsset playerAnimIdle, playerAnimWalking, playerAnimJumping, playerAnimLanding, playerAnimWalkingBackwards, playerAnimFalling, playerAnimDying;
     public AnimationReferenceAsset playerAimingPose, playerNotAimingPose;
     public PlayerAnimationState animationSt = PlayerAnimationState.None;
     public float idleTimeScale = 1, walkingTimeScale = 1, walkingBackTimeScale = 1, jumpingTimeScale = 1, landingTimeScale = 1, fallingTimeScale = 1;
@@ -54,6 +55,7 @@ public class PlayerAnimations : MonoBehaviour
 
     void ManageAnimations()
     {
+        if (myPlayerMov.myPlayerHealth.isDeadBool) return;
         if (myPlayerMov.collCheck.below)
         {
             if (!myPlayerMov.collCheck.sliping)
@@ -93,6 +95,7 @@ public class PlayerAnimations : MonoBehaviour
 
     public void SetAnimationState(PlayerAnimationState state)
     {
+        Debug.Log("entry animation state " + state);
         if (state == animationSt) return;
         animationSt = state;
         switch (animationSt)
@@ -127,6 +130,10 @@ public class PlayerAnimations : MonoBehaviour
                 Spine.TrackEntry currentAnimation = skeletonAnim.state.GetCurrent(0);
                 currentAnimation.TrackTime = skeletonAnim.Skeleton.Data.FindAnimation("walk").Duration;
                 //SetAnimation(playerAnimFalling, false, fallingTimeScale); 
+                break;
+            case PlayerAnimationState.Dying:
+                SetAnimation(playerAnimDying, false, 1);
+
                 break;
         }
     }

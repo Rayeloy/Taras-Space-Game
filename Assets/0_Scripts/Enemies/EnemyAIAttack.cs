@@ -87,8 +87,10 @@ public class EnemyAIAttack : MonoBehaviour
         {
             case EnemyAttackState.Startup:
                 currentHB = Instantiate(myEnemyAI.myEnemyData.attackData.hitboxPrefab, hitboxParent);
+                currentHB.SetActive(false);
                 break;
             case EnemyAttackState.Active:
+                currentHB.SetActive(true);
                 myEnemyAI.myEnemyAIMovement.StartImpulse();
                 break;
             case EnemyAttackState.CD:

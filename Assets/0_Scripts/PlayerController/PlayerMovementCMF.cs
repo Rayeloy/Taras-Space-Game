@@ -216,12 +216,13 @@ public class PlayerMovementCMF : MonoBehaviour
 
         finalMaxMoveSpeed = currentMaxMoveSpeed = maxMoveSpeed;
         //EquipWeaponAtStart();
-
+        myPlayerJetpack.KonoStart();
         PlayerStarts();
     }
 
     private void PlayerStarts()
     {
+        myPlayerHealth.KonoStart();
         collCheck.KonoStart();
         myPlayerWeapon.KonoStart();
         myPlayerAnimations.KonoStart();
@@ -243,39 +244,51 @@ public class PlayerMovementCMF : MonoBehaviour
     public void KonoFixedUpdate()
     {
 
-        //Debug.LogWarning("Current pos = " + transform.position.ToString("F8"));
-        lastPos = transform.position;
+        if (!myPlayerHealth.isDeadBool)
+        {
+            //Debug.LogWarning("Current pos = " + transform.position.ToString("F8"));
+            lastPos = transform.position;
 
 
-        Vector3 platformMovement = collCheck.ChangePositionWithPlatform(mover.instantPlatformMovement);
+            Vector3 platformMovement = collCheck.ChangePositionWithPlatform(mover.instantPlatformMovement);
 
-        collCheck.ResetVariables();
-        ResetMovementVariables();
+            collCheck.ResetVariables();
+            ResetMovementVariables();
 
-        collCheck.UpdateCollisionVariables(mover, vertMovSt,(fixedJumping && noInput));
+            collCheck.UpdateCollisionVariables(mover, vertMovSt, (fixedJumping && noInput));
 
-        collCheck.UpdateCollisionChecks(currentVel);
-        frameCounter++;
+            collCheck.UpdateCollisionChecks(currentVel);
+            frameCounter++;
 
-        #region --- Calculate Movement ---
-        //Debug.Log("Pre Hor Mov: currentVel = " + currentVel.ToString("F6"));
-        HorizontalMovement();
-        //Debug.Log("Post Hor Mov: currentVel = " + currentVel.ToString("F6"));
+            #region --- Calculate Movement ---
+            //Debug.Log("Pre Hor Mov: currentVel = " + currentVel.ToString("F6"));
+            HorizontalMovement();
+            //Debug.Log("Post Hor Mov: currentVel = " + currentVel.ToString("F6"));
 
-        VerticalMovement();
-        //Debug.Log("Post Vert Mov: currentVel = " + currentVel.ToString("F6"));
+            VerticalMovement();
+            //Debug.Log("Post Vert Mov: currentVel = " + currentVel.ToString("F6"));
 
-        finalVel = currentVel;
-        HandleSlopes();
+            finalVel = currentVel;
+            HandleSlopes();
 
-        #endregion
-        //If the character is grounded, extend ground detection sensor range;
-        mover.SetExtendSensorRange(collCheck.below);
-        //Set mover velocity;
-        mover.SetVelocity(finalVel, platformMovement);
+            #endregion
+            //If the character is grounded, extend ground detection sensor range;
+            mover.SetExtendSensorRange(collCheck.below);
+            //Set mover velocity;
+            mover.SetVelocity(finalVel, platformMovement);
 
 
-        collCheck.SavePlatformPoint();
+            collCheck.SavePlatformPoint();
+        }
+        else
+        {
+            if (mover.IsGrounded() && !collCheck.rb.isKinematic)
+            {
+                collCheck.rb.constraints = RigidbodyConstraints2D.FreezeAll;
+                collCheck.rb.isKinematic = true;
+                collCheck.myCollider.isTrigger = true;
+            }
+        }
     }
 
     Vector3 lastPos;
